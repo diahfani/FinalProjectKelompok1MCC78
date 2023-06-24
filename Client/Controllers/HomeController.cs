@@ -1,6 +1,6 @@
-﻿using Client.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Client.Models;
 
 namespace Client.Controllers
 {
@@ -12,16 +12,33 @@ namespace Client.Controllers
         {
             _logger = logger;
         }
+        public IActionResult LandingPage()
+        {
+            return View();
+        }
 
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Login()
         {
             return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
+        public IActionResult Page_Task()
+        {
+            return View();
+        }
+        public IActionResult Page_Employee()
+        {
+            return View();
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
