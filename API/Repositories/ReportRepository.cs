@@ -1,8 +1,10 @@
 ﻿using API.Contracts;
 using API.Model;
 using API.Utilities;
+using API.ViewModel.Employee;
 using API.ViewModel.Report;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 
@@ -61,5 +63,10 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
             throw;
         }
     }
+
+        public Report GetReportByEmployeeId(Guid employeeId)
+        {
+            return _context.Set<Report>().Find(employeeId);
+        }
 }
 

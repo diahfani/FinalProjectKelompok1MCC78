@@ -8,4 +8,9 @@ public class TaskRepository : GeneralRepository<Model.Task>, ITaskRepository
     {
         
     }
+
+    public Task GetByEmployeeId(Guid employeeId)
+    {
+        return _context.Set<Task>().Find(employeeId);
+    }
 }

@@ -8,5 +8,7 @@ namespace API.Contracts
     {
         public System.Threading.Tasks.Task PostFileAsync(ReportVM report);
         public System.Threading.Tasks.Task DownloadFileByGuid(Guid guid);
+
+        Report GetReportByEmployeeId(Guid employeeId);
     }
 }

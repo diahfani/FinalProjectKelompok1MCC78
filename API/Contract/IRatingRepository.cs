@@ -4,5 +4,6 @@ namespace API.Contracts
 {
     public interface IRatingRepository : IGenericRepository<Rating>
     {
+        Rating GetRatingByEmployeeId(Guid employeeId);
     }
 }
