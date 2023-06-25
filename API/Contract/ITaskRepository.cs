@@ -1,7 +1,10 @@
-﻿namespace API.Contracts
+﻿using API.ViewModel.Employee;
+using API.ViewModel.Task;
+
+namespace API.Contracts
 {
     public interface ITaskRepository : IGenericRepository<Model.Task>
     {
-        Task GetByEmployeeId(Guid employeeId);
+        public IEnumerable<TaskVM> GetTaskByEmployeeId(Guid employeeId);
     }
 }

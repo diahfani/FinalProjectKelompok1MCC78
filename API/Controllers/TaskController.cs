@@ -18,5 +18,27 @@ namespace API.Controllers
             _taskRepository = taskRepository;
             _mapper = mapper;
         }
+
+        [HttpGet("GetTaskByEmployeeId")]
+        public IActionResult GetTaskByEmployeeId(Guid employeeId)
+        {
+            var tasks = _taskRepository.GetTaskByEmployeeId(employeeId);
+            if (tasks == null)
+            {
+                return NotFound(new ResponseVM<TaskVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+            return Ok(new ResponseVM<IEnumerable<TaskVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Found Data Task",
+                Data = tasks
+            });
+        }
     }
 }

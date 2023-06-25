@@ -62,6 +62,7 @@ namespace API.Repositories
             return entity;
         }
 
+
         public bool Update(Entity entity)
         {
             try

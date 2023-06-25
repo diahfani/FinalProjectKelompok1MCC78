@@ -10,5 +10,6 @@ namespace API.Contracts
         public System.Threading.Tasks.Task DownloadFileByGuid(Guid guid);
 
         Report GetReportByEmployeeId(Guid employeeId);
+        Report GetReportByTaskId(Guid taskId);
     }
 }

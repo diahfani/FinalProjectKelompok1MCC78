@@ -64,9 +64,14 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
         }
     }
 
-        public Report GetReportByEmployeeId(Guid employeeId)
-        {
-            return _context.Set<Report>().Find(employeeId);
-        }
+    public Report GetReportByEmployeeId(Guid employeeId)
+    {
+       return _context.Set<Report>().Find(employeeId);
+    }
+
+    public Report GetReportByTaskId(Guid TaskId)
+    {
+        return _context.Set<Report>().Find(TaskId);
+    }
 }
 
