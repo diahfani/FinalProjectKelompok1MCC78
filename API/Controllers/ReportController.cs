@@ -18,7 +18,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpPost("PostSingleFile")]
-    public async Task<IActionResult> PostSingleFile([FromForm] ReportVM reportvm)
+    public async Task<IActionResult> PostSingleFile([FromForm] FileUploadAndDownlodVM reportvm)
     {
         if (reportvm is null)
         {

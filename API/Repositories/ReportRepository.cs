@@ -37,7 +37,7 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
             await stream.CopyToAsync(fileStream);
         }
     }
-    public async System.Threading.Tasks.Task PostFileAsync(ReportVM reportvm)
+    public async System.Threading.Tasks.Task PostFileAsync(FileUploadAndDownlodVM reportvm)
     {
         try
         {
