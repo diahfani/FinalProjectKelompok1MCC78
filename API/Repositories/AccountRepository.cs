@@ -72,7 +72,7 @@ public class AccountRepository : GeneralRepository<Account>, IAccountRepository
 
             var accountRole = new AccountRole
             {
-                RoleGuid = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                RoleGuid = Guid.Parse("BAD2010A-8D51-4EAF-ECCB-08DB73D114FF"),
                 AccountGuid = employee.Guid,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now
