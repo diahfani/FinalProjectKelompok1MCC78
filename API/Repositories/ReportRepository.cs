@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 
 namespace API.Repositories;
 
@@ -72,6 +73,44 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
     public Report GetReportByTaskId(Guid TaskId)
     {
         return _context.Set<Report>().Find(TaskId);
+    }
+
+    public async System.Threading.Tasks.Task UpdateReport(FileUploadAndDownlodVM report)
+    {
+        try
+        {
+            var guid = (Guid)typeof(FileUploadAndDownlodVM).GetProperty("Guid").GetValue(report);
+            var oldentity = GetByGuid(guid);
+            if (oldentity == null)
+            {
+                return;
+            }
+/*            var getCreatedDate = typeof(FileUploadAndDownlodVM).GetProperty("CreatedDate")!.GetValue(oldentity)!;
+            typeof(FileUploadAndDownlodVM).GetProperty("CreatedDate")!.SetValue(report, getCreatedDate);
+*/            typeof(FileUploadAndDownlodVM).GetProperty("ModifiedDate")!.SetValue(report, DateTime.Now);
+
+            var fileDetails = new Report
+            {
+                Guid = report.Guid,
+                Subject = report.Subject,
+                Description = report.Description,
+                FileName = report.FileName.FileName,
+                FileType = report.FileType,
+                CreatedDate = oldentity.CreatedDate,
+            };
+            using (var stream = new MemoryStream())
+            {
+                report.FileName.CopyTo(stream);
+                fileDetails.FileData = stream.ToArray();
+            }
+            var result = _context.Set<Report>().Update(fileDetails);
+            await _context.SaveChangesAsync();
+
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 }
 

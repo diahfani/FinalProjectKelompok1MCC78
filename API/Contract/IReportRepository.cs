@@ -11,5 +11,6 @@ namespace API.Contracts
 
         Report GetReportByEmployeeId(Guid employeeId);
         Report GetReportByTaskId(Guid taskId);
+        public System.Threading.Tasks.Task UpdateReport(FileUploadAndDownlodVM report);
     }
 }

@@ -35,6 +35,26 @@ public class ReportController : BaseController<Report, ReportVM>
         }
     }
 
+    [HttpPut("UpdateSingleReport")]
+    
+    public async Task<IActionResult> UpdateSingleReport([FromForm] FileUploadAndDownlodVM reportvm)
+    {
+        if (reportvm is null)
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            await _reportRepository.UpdateReport(reportvm);
+            return Ok();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
     [HttpGet("DownloadFile")]
     public async Task<IActionResult> DownloadFile(Guid guid)
     {
