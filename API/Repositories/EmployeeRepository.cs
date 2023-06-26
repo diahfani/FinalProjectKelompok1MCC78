@@ -12,19 +12,22 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
     private readonly ITaskRepository _taskRepository;
     private readonly IReportRepository _reportRepository;
     private readonly IRatingRepository _ratingRepository;
-    private readonly IEmployeeRepository _employeeRepository;
+    /*private readonly IEmployeeRepository _employeeRepository;*/
     public EmployeeRepository(ProjectManagementDBContext context,
                               ITaskRepository taskRepository,
                               IReportRepository reportRepository,
-                              IRatingRepository ratingRepository,
-                              IEmployeeRepository employeeRepository) : base(context)
+                              IRatingRepository ratingRepository) : base(context)
     {
         _taskRepository = taskRepository;
         _reportRepository = reportRepository;
         _ratingRepository = ratingRepository;
-        _employeeRepository = employeeRepository;
+        /*_employeeRepository = employeeRepository;*/
     }
 
+    public bool CheckEmailAndPhoneAndNIK(string value)
+    {
+        return _context.Employees.Any(e => e.Email == value || e.NIK == value || e.PhoneNumber == value);
+    }
 
 
 

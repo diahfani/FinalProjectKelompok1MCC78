@@ -17,7 +17,7 @@ namespace API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.7")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -234,15 +234,15 @@ namespace API.Migrations
                         new
                         {
                             Guid = new Guid("bad2010a-8d51-4eaf-eccb-08db73d114ff"),
-                            CreatedDate = new DateTime(2023, 6, 24, 19, 23, 10, 927, DateTimeKind.Local).AddTicks(7574),
-                            ModifiedDate = new DateTime(2023, 6, 24, 19, 23, 10, 927, DateTimeKind.Local).AddTicks(7584),
+                            CreatedDate = new DateTime(2023, 6, 26, 10, 44, 16, 668, DateTimeKind.Local).AddTicks(6408),
+                            ModifiedDate = new DateTime(2023, 6, 26, 10, 44, 16, 668, DateTimeKind.Local).AddTicks(6416),
                             Name = "employee"
                         },
                         new
                         {
                             Guid = new Guid("f0ed952a-0321-4193-3653-08db73d30b74"),
-                            CreatedDate = new DateTime(2023, 6, 24, 19, 23, 10, 927, DateTimeKind.Local).AddTicks(7587),
-                            ModifiedDate = new DateTime(2023, 6, 24, 19, 23, 10, 927, DateTimeKind.Local).AddTicks(7587),
+                            CreatedDate = new DateTime(2023, 6, 26, 10, 44, 16, 668, DateTimeKind.Local).AddTicks(6419),
+                            ModifiedDate = new DateTime(2023, 6, 26, 10, 44, 16, 668, DateTimeKind.Local).AddTicks(6420),
                             Name = "manager"
                         });
                 });

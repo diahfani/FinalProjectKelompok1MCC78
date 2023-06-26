@@ -10,15 +10,18 @@ public class RegisterVM
     public string Fullname { get; set; }
     [Required(ErrorMessage = "NIK is required")]
     [Display(Name = "NIK")]
+    [NIKEmailPhoneValidation(nameof(NIK))]
     public string NIK { get; set; }
     [Required(ErrorMessage = "Email is required")]
     [EmailAddress]
+    [NIKEmailPhoneValidation(nameof(Email))]
     public string Email { get; set; }
     [Required(ErrorMessage = "Gender is required")]
 
     public GenderLevel Gender { get; set; }
     [Phone]
     [Required(ErrorMessage ="Phone number is required")]
+    [NIKEmailPhoneValidation(nameof(PhoneNumber))]
     public string PhoneNumber { get; set; }
     [Required]
     public DateTime HiringDate { get; set; }
