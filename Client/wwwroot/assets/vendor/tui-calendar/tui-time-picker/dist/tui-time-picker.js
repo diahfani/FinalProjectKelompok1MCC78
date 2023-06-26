@@ -3348,7 +3348,7 @@ var Spinbox = defineClass(
 
     /**
      * Set disabledItems
-     * @param {object} disabledItems - disabled status of items
+     * @param {object} disabledItems - disabled StatusManager of items
      */
     setDisabledItems: function(disabledItems) {
       this._disabledItems = disabledItems;
@@ -3808,7 +3808,7 @@ var Selectbox = defineClass(
 
     /**
      * Set disabledItems
-     * @param {object} disabledItems - disabled status of items
+     * @param {object} disabledItems - disabled StatusManager of items
      * @private
      */
     setDisabledItems: function(disabledItems) {

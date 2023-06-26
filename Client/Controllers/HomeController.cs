@@ -17,10 +17,6 @@ namespace Client.Controllers
             return View();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         public IActionResult Login()
         {
@@ -30,17 +26,25 @@ namespace Client.Controllers
         {
             return View();
         }
-        public IActionResult Page_Task()
+        public IActionResult Manager()
         {
             return View();
         }
-        public IActionResult Page_Employee()
+        public IActionResult Employee()
+        {
+            return View();
+        }
+        public IActionResult StatusManager()
         {
             return View();
         }
 
+        public IActionResult StatusEmployee()
+        {
+            return View();
+        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

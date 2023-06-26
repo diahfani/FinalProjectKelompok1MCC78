@@ -1,0 +1,363 @@
+﻿@{
+    Layout = null;
+}
+
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <title>StatusManager</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="~/assets/images/favicon.ico" />
+      <link rel="stylesheet" href="~/assets/css/bootstrap/bootstrap.min.css">
+      
+      <link rel="stylesheet" href="~/assets/css/backend-plugin.min.css">
+      <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
+      <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+      <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
+      
+      <link rel="stylesheet" href="~/assets/vendor/tui-calendar/tui-calendar/dist/tui-calendar.css">
+      <link rel="stylesheet" href="~/assets/vendor/tui-calendar/tui-date-picker/dist/tui-date-picker.css">
+      <link rel="stylesheet" href="~/assets/vendor/tui-calendar/tui-time-picker/dist/tui-time-picker.css"> 
+      <style>
+        /* Custom styles for the rating modal */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .rating-container .star {
+            font-size: 50px;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .rating-container .star.checked {
+            color: #f8b739;
+        }
+        .rating-container .star:hover,
+        .rating-container .star.checked:hover {
+            color: #f8b739;
+        }
+        .rating-container .star:last-child {
+            margin-right: 0;
+        }
+        .modal-body .custom-textbox{
+            width: 470px;
+            height: 400px;
+        }
+    </style>
+
+  </head>
+  <body class="  ">
+    <!-- Wrapper Start -->
+    <div class="wrapper">
+      
+      <div class="iq-sidebar  sidebar-default ">
+          <div class="iq-sidebar-logo d-flex align-items-center">
+              <a asp-controller="Home" asp-action="StatusEmployee" class="header-logo">
+                  <img src="~/assets/images/logo.svg" alt="logo">
+                  <h3 class="logo-title light-logo">Status</h3>
+              </a>
+              <div class="iq-menu-bt-sidebar ml-0">
+                  <i class="las la-bars wrapper-menu"></i>
+              </div>
+          </div>
+          <div class="data-scrollbar" data-scroll="1">
+              <nav class="iq-sidebar-menu">
+                  <ul id="iq-sidebar-toggle" class="iq-menu">
+                      <li class="">
+                          <a asp-controller="Home" asp-action="Employee" class="svg-icon">                        
+                              <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                              </svg>
+                              <span class="ml-4">Employee</span>
+                          </a>
+                      </li>
+                      <li class="active">
+                          <a asp-controller="Home" asp-action="StatusEmployee" class="svg-icon">                        
+                              <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>
+                              </svg>
+                              <span class="ml-4">Status</span>
+                          </a>
+                      </li>
+                      
+                  </ul>
+              </nav>
+              
+              <div class="pt-5 pb-2"></div>
+          </div>
+      </div>      
+      <div class="iq-top-navbar">
+          <div class="iq-navbar-custom">
+              <nav class="navbar navbar-expand-lg navbar-light p-0">
+                  
+                  <div class="navbar-breadcrumb">
+                      <h5>Dashboard</h5>
+                  </div>
+                  <div class="d-flex align-items-center">
+                      <button class="navbar-toggler" type="button" data-toggle="collapse"
+                          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                          aria-label="Toggle navigation">
+                          <i class="ri-menu-3-line"></i>
+                      </button>
+                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul class="navbar-nav ml-auto navbar-list align-items-center">
+                              
+                              <li class="nav-item nav-icon dropdown caption-content">
+                                  <a href="#" class="search-toggle dropdown-toggle  d-flex align-items-center" id="dropdownMenuButton4"
+                                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <img src="~/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
+                                      <div class="caption ml-3">
+                                          <h6 class="mb-0 line-height">Savannah Nguyen<i class="las la-angle-down ml-2"></i></h6>
+                                      </div>
+                                  </a>                            
+                                  <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
+                                      
+                                      <li class="dropdown-item  d-flex svg-icon ">
+                                          <svg class="svg-icon mr-0 text-primary" id="h-05-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                          </svg>
+                                          <a asp-controller="Home" asp-action="Login">Logout</a>
+                                      </li>
+                                  </ul>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+              </nav>
+          </div>
+      </div>        
+      <div class="content-page">
+     <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                            <h5>Status</h5>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+            <div class="table-responsive rounded bg-white mb-4">
+                <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
+                    <tbody>
+                        <tr>
+                            <td>Karyawan 1</td>
+                            <td>
+                                Create unique style of inner pages
+                            </td>
+                            <td>
+                                <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                            </td>
+                            <td>
+                               <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light">Rating</a>
+                            </td>
+                            <td>
+                               
+                                <div class="media align-items-center mt-md-0 mt-3">
+                                  <a class="btn bg-success-light" data-toggle="collapse" href="#collapseEdit2" role="button" aria-expanded="false" aria-controls="collapseEdit2"><i class="ri-edit-box-line m-0"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="collapse" id="collapseEdit2">                                            
+                                    <div class="card card-list task-card">
+                                        <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
+                                            <div class="header-title">
+                                                <div class="custom-control custom-checkbox custom-control-inline">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheck006">
+                                                    <div>
+                                                    <h5 class="mb-2">Judul</h5>
+                                                </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-lg-6">                                                        
+                                                            <h5 class="mb-2">Description</h5>
+                                                            <p class="mb-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group mb-0">
+                                                                <label for="exampleInputText4" class="h5">Deadline</label>
+                                                                <div class="custom-file">
+                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Deadline</label>
+                                                                </div>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group mb-0">
+                                                                <label for="exampleInputText4" class="h5">Created Date</label>
+                                                                <div class="custom-file">
+                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Dibuat</label>
+                                                                </div>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group mb-0">
+                                                                <label for="exampleInputText4" class="h5">Modified Date</label>
+                                                                <div class="custom-file">
+                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Diedit</label>
+                                                                </div>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card mb-3">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        
+                                                        <div class="col-lg-6">
+                                                            <div class="form-group mb-0">
+                                                                <label for="exampleInputText01" class="h5">Attachments</label>
+                                                                    <div class="custom-file">
+                                                                         <label class="custom-file-label2" for="inputGroupFile002">Nama File</label>
+                                                                    </div>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+            </div>
+        </div>
+        <!-- Page end  -->
+    </div>
+      </div>
+    </div>
+    <!-- Wrapper End-->
+
+    <!-- Modal list start --> 
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ratingModalLabel">Rate and Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="rating-container">
+                        <span class="star" onclick="rate(1)">&#9734;</span>
+                        <span class="star" onclick="rate(2)">&#9734;</span>
+                        <span class="star" onclick="rate(3)">&#9734;</span>
+                        <span class="star" onclick="rate(4)">&#9734;</span>
+                        <span class="star" onclick="rate(5)">&#9734;</span>
+                    </div>
+                    <textarea class="custom-textbox"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        let selectedRating = 0;
+
+        function rate(rating) {
+            selectedRating = rating;
+
+            // Reset all stars to default state
+            const stars = document.getElementsByClassName('star');
+            for (let i = 0; i < stars.length; i++) {
+                stars[i].innerHTML = '&#9734;';
+                stars[i].classList.remove('checked');
+            }
+
+            // Fill selected stars
+            for (let i = 0; i < rating; i++) {
+                stars[i].innerHTML = '&#9733;';
+                stars[i].classList.add('checked');
+            }
+        }
+
+        function submitRating() {
+            const comment = document.getElementById('comment').value;
+
+            // Perform rating submission logic here
+            // You can send the selectedRating and comment to the server for further processing
+
+            // Example alert to show the selected rating and comment
+            alert('Rating: ' + selectedRating + '\nComment: ' + comment);
+
+            // Close the modal
+            $('#ratingModal').modal('hide');
+        }
+    </script>
+    
+    <!-- Backend Bundle JavaScript -->
+    <script src="~/assets/js/backend-bundle.min.js"></script>
+    
+    <!-- Table Treeview JavaScript -->
+    <script src="~/assets/js/table-treeview.js"></script>
+    
+    <!-- Chart Custom JavaScript -->
+    <script src="~/assets/js/customizer.js"></script>
+    
+    <!-- Chart Custom JavaScript -->
+    <script async src="~/assets/js/chart-custom.js"></script>
+    <!-- Chart Custom JavaScript -->
+    <script async src="~/assets/js/slider.js"></script>
+    
+    <!-- app JavaScript -->
+    <script src="~/assets/js/app.js"></script>
+    
+    <script src="~/assets/vendor/moment.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="~/assets/js/popper.min.js"></script>
+
+    <script src="~/assets/css/bootstrap/bootstrap.min.css"></script>
+  </body>
+</html>

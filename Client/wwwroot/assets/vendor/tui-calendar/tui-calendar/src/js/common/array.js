@@ -23,7 +23,7 @@ var datetime = require('../common/datetime');
  * @param {array} arr array to search.
  * @param {(string|number|boolean)} search value to search.
  * @param {function} [fn] iteratee for retrieve each element's value to search.
- * @param {function} [compare] compare function for specific sort status. default is string ascending.
+ * @param {function} [compare] compare function for specific sort Status. default is string ascending.
  * @returns {number} The number of item index searched. return negative number when no exist that item.
  * It can use insert index after Math.abs()
  * @example

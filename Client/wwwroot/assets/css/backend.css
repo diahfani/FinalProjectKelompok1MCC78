@@ -2564,6 +2564,23 @@ textarea.form-control {
   border: 1px solid #ced4da;
   border-radius: 16px;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); }
+
+.custom-file-label2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    height: calc(1.5em + 0.626rem + 2px);
+    padding: 0.313rem 0.625rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 16px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
   .custom-file-label::after {
     position: absolute;
     top: 0;
@@ -11460,7 +11477,7 @@ body.tab-horizontal .iq-footer {
 .flet-datepickr .flatpickr-months .flatpickr-prev-month:hover svg {
   fill: #5773FF; }
 
-.data-indicator .status {
+.data-indicator .StatusManager {
   margin-top: -33px;
   display: block;
   margin-right: -60px; }
@@ -12059,8 +12076,9 @@ button.bg-primary-light:focus {
   background-color: #9daeff !important; }
 
 .bg-secondary-light {
-  color: #b53209 !important;
-  background-color: #fccfc1 !important; }
+    color: #2f8f81 !important;
+    background-color: #fccfc1 !important;
+}
 
 a.bg-secondary-light:hover, a.bg-secondary-light:focus,
 button.bg-secondary-light:hover,
@@ -18936,11 +18954,11 @@ g[aria-describedby="id-22-description"] {
 @media (max-width: 660px) {
   .breadcrumb-content h5 {
     margin-bottom: 10px; }
-  .breadcrumb-content .status-dropdown {
+  .breadcrumb-content .StatusManager-dropdown {
     width: 100%;
     margin-bottom: 15px;
     margin-right: 0 !important; }
-    .breadcrumb-content .status-dropdown .btn.bg-body {
+    .breadcrumb-content .StatusManager-dropdown .btn.bg-body {
       width: 100%; }
   .breadcrumb-content .btn-new {
     border: none !important;

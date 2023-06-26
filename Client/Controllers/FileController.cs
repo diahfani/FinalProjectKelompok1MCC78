@@ -1,34 +1,36 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Microsoft.AspNetCore.Mvc;
+using File = Client.Models.File;
 
 namespace Client.Controllers;
 
-public class ReportController : Controller
+public class FileController : Controller
 {
-    private readonly IReportRepository reprepository;
+    private readonly IFileRepository filerepository;
 
-    public ReportController(IReportRepository _reprepository)
+    public FileController(IFileRepository _filerepository)
     {
-        this.reprepository = _reprepository;
+        this.filerepository = _filerepository;
     }
 
     public async Task<IActionResult> Index()
     {
-        var result = await reprepository.Get();
-        var reports = new List<Report>();
+        var result = await filerepository.Get();
+        var files = new List<File>();
 
         if (result.Data != null)
         {
-            reports = result.Data.Select(e => new Report
+            files = result.Data.Select(e => new File
             {
                 Guid = e.Guid,
-                Subject = e.Subject,
-                Description = e.Description
+                Name = e.Name,
+                Data = e.Data,
+                Type = e.Type
 
             }).ToList();
         }
-        return View(reports);
+        return View(files);
     }
 
 
@@ -39,9 +41,9 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Creates(Report report)
+    public async Task<IActionResult> Creates(File file)
     {
-        var result = await reprepository.Post(report);
+        var result = await filerepository.Post(file);
         if (result.StatusCode == "200")
         {
             return RedirectToAction(nameof(Index));
@@ -57,27 +59,28 @@ public class ReportController : Controller
 
     public async Task<IActionResult> Deletes(Guid guid)
     {
-        var result = await reprepository.Get(guid);
-        var report = new Report();
+        var result = await filerepository.Get(guid);
+        var file = new File();
         if (result.Data?.Guid is null)
         {
-            return View(report);
+            return View(file);
         }
         else
         {
-            report.Guid = result.Data.Guid;
-            report.Subject = result.Data.Subject;
-            report.Description = result.Data.Description;
+            file.Guid = result.Data.Guid;
+            file.Name = result.Data.Name;
+            file.Data = result.Data.Data;
+            file.Type = result.Data.Type;
 
 
         }
-        return View(report);
+        return View(file);
     }
 
     [HttpPost]
     public async Task<IActionResult> Remove(Guid guid)
     {
-        var result = await reprepository.Deletes(guid);
+        var result = await filerepository.Deletes(guid);
         if (result.StatusCode == "200")
         {
             return RedirectToAction(nameof(Index));
@@ -86,11 +89,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Report report)
+    public async Task<IActionResult> Edit(File file)
     {
 
 
-        var result = await reprepository.Put(report);
+        var result = await filerepository.Put(file);
         if (result.StatusCode == "200")
         {
             return RedirectToAction(nameof(Index));
@@ -107,20 +110,21 @@ public class ReportController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(Guid guid)
     {
-        var result = await reprepository.Get(guid);
-        var report = new Report();
+        var result = await filerepository.Get(guid);
+        var file = new File();
         if (result.Data?.Guid is null)
         {
-            return View(report);
+            return View(file);
         }
         else
         {
-            report.Guid = result.Data.Guid;
-            report.Subject = result.Data.Subject;
-            report.Description = result.Data.Description;
+            file.Guid = result.Data.Guid;
+            file.Name = result.Data.Name;
+            file.Data = result.Data.Data;
+            file.Type = result.Data.Type;
         }
 
-        return View(report);
+        return View(file);
     }
 }
 
