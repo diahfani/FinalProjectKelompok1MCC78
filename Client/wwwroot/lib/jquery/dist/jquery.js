@@ -9421,8 +9421,8 @@ jQuery.extend( {
 			deferred = jQuery.Deferred(),
 			completeDeferred = jQuery.Callbacks( "once memory" ),
 
-			// Status-dependent callbacks
-			statusCode = s.statusCode || {},
+			// StatusManager-dependent callbacks
+			StatusManagerCode = s.StatusManagerCode || {},
 
 			// Headers (they are sent all at once)
 			requestHeaders = {},
@@ -9475,19 +9475,19 @@ jQuery.extend( {
 					return this;
 				},
 
-				// Status-dependent callbacks
-				statusCode: function( map ) {
+				// StatusManager-dependent callbacks
+				StatusManagerCode: function( map ) {
 					var code;
 					if ( map ) {
 						if ( completed ) {
 
 							// Execute the appropriate callbacks
-							jqXHR.always( map[ jqXHR.status ] );
+							jqXHR.always( map[ jqXHR.StatusManager ] );
 						} else {
 
 							// Lazy-add the new callbacks in a way that preserves old ones
 							for ( code in map ) {
-								statusCode[ code ] = [ statusCode[ code ], map[ code ] ];
+								StatusManagerCode[ code ] = [ StatusManagerCode[ code ], map[ code ] ];
 							}
 						}
 					}
@@ -9495,8 +9495,8 @@ jQuery.extend( {
 				},
 
 				// Cancel the request
-				abort: function( statusText ) {
-					var finalText = statusText || strAbort;
+				abort: function( StatusManagerText ) {
+					var finalText = StatusManagerText || strAbort;
 					if ( transport ) {
 						transport.abort( finalText );
 					}
@@ -9693,9 +9693,9 @@ jQuery.extend( {
 		}
 
 		// Callback for when everything is done
-		function done( status, nativeStatusText, responses, headers ) {
+		function done( StatusManager, nativeStatusManagerText, responses, headers ) {
 			var isSuccess, success, error, response, modified,
-				statusText = nativeStatusText;
+				StatusManagerText = nativeStatusManagerText;
 
 			// Ignore repeat invocations
 			if ( completed ) {
@@ -9717,10 +9717,10 @@ jQuery.extend( {
 			responseHeadersString = headers || "";
 
 			// Set readyState
-			jqXHR.readyState = status > 0 ? 4 : 0;
+			jqXHR.readyState = StatusManager > 0 ? 4 : 0;
 
 			// Determine if successful
-			isSuccess = status >= 200 && status < 300 || status === 304;
+			isSuccess = StatusManager >= 200 && StatusManager < 300 || StatusManager === 304;
 
 			// Get response data
 			if ( responses ) {
@@ -9751,46 +9751,46 @@ jQuery.extend( {
 				}
 
 				// if no content
-				if ( status === 204 || s.type === "HEAD" ) {
-					statusText = "nocontent";
+				if ( StatusManager === 204 || s.type === "HEAD" ) {
+					StatusManagerText = "nocontent";
 
 				// if not modified
-				} else if ( status === 304 ) {
-					statusText = "notmodified";
+				} else if ( StatusManager === 304 ) {
+					StatusManagerText = "notmodified";
 
 				// If we have data, let's convert it
 				} else {
-					statusText = response.state;
+					StatusManagerText = response.state;
 					success = response.data;
 					error = response.error;
 					isSuccess = !error;
 				}
 			} else {
 
-				// Extract error from statusText and normalize for non-aborts
-				error = statusText;
-				if ( status || !statusText ) {
-					statusText = "error";
-					if ( status < 0 ) {
-						status = 0;
+				// Extract error from StatusManagerText and normalize for non-aborts
+				error = StatusManagerText;
+				if ( StatusManager || !StatusManagerText ) {
+					StatusManagerText = "error";
+					if ( StatusManager < 0 ) {
+						StatusManager = 0;
 					}
 				}
 			}
 
 			// Set data for the fake xhr object
-			jqXHR.status = status;
-			jqXHR.statusText = ( nativeStatusText || statusText ) + "";
+			jqXHR.StatusManager = StatusManager;
+			jqXHR.StatusManagerText = ( nativeStatusManagerText || StatusManagerText ) + "";
 
 			// Success/Error
 			if ( isSuccess ) {
-				deferred.resolveWith( callbackContext, [ success, statusText, jqXHR ] );
+				deferred.resolveWith( callbackContext, [ success, StatusManagerText, jqXHR ] );
 			} else {
-				deferred.rejectWith( callbackContext, [ jqXHR, statusText, error ] );
+				deferred.rejectWith( callbackContext, [ jqXHR, StatusManagerText, error ] );
 			}
 
-			// Status-dependent callbacks
-			jqXHR.statusCode( statusCode );
-			statusCode = undefined;
+			// StatusManager-dependent callbacks
+			jqXHR.StatusManagerCode( StatusManagerCode );
+			StatusManagerCode = undefined;
 
 			if ( fireGlobals ) {
 				globalEventContext.trigger( isSuccess ? "ajaxSuccess" : "ajaxError",
@@ -9798,7 +9798,7 @@ jQuery.extend( {
 			}
 
 			// Complete
-			completeDeferred.fireWith( callbackContext, [ jqXHR, statusText ] );
+			completeDeferred.fireWith( callbackContext, [ jqXHR, StatusManagerText ] );
 
 			if ( fireGlobals ) {
 				globalEventContext.trigger( "ajaxComplete", [ jqXHR, s ] );
@@ -9960,9 +9960,9 @@ jQuery.ajaxSettings.xhr = function() {
 	} catch ( e ) {}
 };
 
-var xhrSuccessStatus = {
+var xhrSuccessStatusManager = {
 
-		// File protocol always yields status code 0, assume 200
+		// File protocol always yields StatusManager code 0, assume 200
 		0: 200,
 
 		// Support: IE <=9 only
@@ -10033,20 +10033,20 @@ jQuery.ajaxTransport( function( options ) {
 								// Support: IE <=9 only
 								// On a manual native abort, IE9 throws
 								// errors on any property access that is not readyState
-								if ( typeof xhr.status !== "number" ) {
+								if ( typeof xhr.StatusManager !== "number" ) {
 									complete( 0, "error" );
 								} else {
 									complete(
 
-										// File: protocol always yields status 0; see #8605, #14207
-										xhr.status,
-										xhr.statusText
+										// File: protocol always yields StatusManager 0; see #8605, #14207
+										xhr.StatusManager,
+										xhr.StatusManagerText
 									);
 								}
 							} else {
 								complete(
-									xhrSuccessStatus[ xhr.status ] || xhr.status,
-									xhr.statusText,
+									xhrSuccessStatusManager[ xhr.StatusManager ] || xhr.StatusManager,
+									xhr.StatusManagerText,
 
 									// Support: IE <=9 only
 									// IE9 has no XHR2 but throws on binary (trac-11426)
@@ -10394,12 +10394,12 @@ jQuery.fn.load = function( url, params, callback ) {
 				// Otherwise use the full result
 				responseText );
 
-		// If the request succeeds, this function gets "data", "status", "jqXHR"
+		// If the request succeeds, this function gets "data", "StatusManager", "jqXHR"
 		// but they are ignored because response was set above.
-		// If it fails, this function gets "jqXHR", "status", "error"
-		} ).always( callback && function( jqXHR, status ) {
+		// If it fails, this function gets "jqXHR", "StatusManager", "error"
+		} ).always( callback && function( jqXHR, StatusManager ) {
 			self.each( function() {
-				callback.apply( this, response || [ jqXHR.responseText, status, jqXHR ] );
+				callback.apply( this, response || [ jqXHR.responseText, StatusManager, jqXHR ] );
 			} );
 		} );
 	}
