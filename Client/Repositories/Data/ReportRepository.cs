@@ -13,7 +13,7 @@ public class ReportRepository : GeneralRepository<Report, Guid>, IReportReposito
     {
         httpClient = new HttpClient
         {
-            BaseAddress = new Uri("https://localhost:7032/api/")
+            BaseAddress = new Uri("https://localhost:7046/api/")
         };
         this.request = request;
     }

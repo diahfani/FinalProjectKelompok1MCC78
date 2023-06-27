@@ -35,10 +35,10 @@ public class FileController : Controller
 
 
 
-    public async Task<IActionResult> Creates()
+    /*public Task<IActionResult> Creates()
     {
         return View();
-    }
+    }*/
 
     [HttpPost]
     public async Task<IActionResult> Creates(File file)

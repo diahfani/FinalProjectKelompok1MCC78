@@ -1,8 +1,12 @@
-﻿namespace Client.Models
+﻿using MessagePack.Formatters;
+
+namespace Client.Models
 {
     public class Account
     {
-        public string Email { get; set; }
+        public Guid Guid { get; set; }
         public string Password { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
     }
 }

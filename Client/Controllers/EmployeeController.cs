@@ -25,10 +25,14 @@ public class EmployeeController : Controller
             {
                 Guid = e.Guid,
                 NIK = e.NIK,
-                FullName = e.FullName,
+                Fullname = e.Fullname,
+                Gender = e.Gender,
                 Email = e.Email,
                 PhoneNumber = e.PhoneNumber,
-                HiringDate = e.HiringDate
+                HiringDate = e.HiringDate,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate,
+                ManagerID = e.ManagerID
             }).ToList();
         }
         return View(employees);
@@ -36,10 +40,10 @@ public class EmployeeController : Controller
 
 
 
-    public async Task<IActionResult> Creates()
+    /*public Task<IActionResult> Creates()
     {
         return View();
-    }
+    }*/
 
     [HttpPost]
     public async Task<IActionResult> Creates(Employee employee)
@@ -70,11 +74,14 @@ public class EmployeeController : Controller
         {
             employee.Guid = result.Data.Guid;
             employee.NIK = result.Data.NIK;
-            employee.FullName = result.Data.FullName;
+            employee.Fullname = result.Data.Fullname;
+            employee.Gender = result.Data.Gender;
             employee.Email = result.Data.Email;
             employee.PhoneNumber = result.Data.PhoneNumber;
             employee.HiringDate = result.Data.HiringDate;
-
+            employee.CreatedDate = result.Data.CreatedDate;
+            employee.ModifiedDate = result.Data.ModifiedDate;
+            employee.ManagerID = result.Data.ManagerID;
         }
         return View(employee);
     }
@@ -122,10 +129,14 @@ public class EmployeeController : Controller
         {
             employee.Guid = result.Data.Guid;
             employee.NIK = result.Data.NIK;
-            employee.FullName = result.Data.FullName;
+            employee.Fullname = result.Data.Fullname;
+            employee.Gender = result.Data.Gender;
             employee.Email = result.Data.Email;
             employee.PhoneNumber = result.Data.PhoneNumber;
             employee.HiringDate = result.Data.HiringDate;
+            employee.CreatedDate = result.Data.CreatedDate;
+            employee.ModifiedDate = result.Data.ModifiedDate;
+            employee.ManagerID = result.Data.ManagerID;
         }
 
         return View(employee);

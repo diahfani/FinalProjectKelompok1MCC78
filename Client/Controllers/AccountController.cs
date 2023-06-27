@@ -20,11 +20,11 @@ namespace Client.Controllers
         }
 
         [HttpPost]
-        /*[ValidateAntiForgeryToken]*/
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logins(LoginVM login)
         {
             var result = await repository.Logins(login);
-           /* if (result is null)
+            if (result is null)
             {
                 return RedirectToAction("Error", "Home");
             }
@@ -32,11 +32,16 @@ namespace Client.Controllers
             {
                 ModelState.AddModelError(string.Empty, result.Message);
                 return View();
-            }*/
+            }
             if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                return RedirectToAction("Index", "Home");
+                if (User.IsInRole("manager"))
+                {
+                    return RedirectToAction("Manager", "Home");
+                } else if(User.IsInRole("employee")) {
+                    return RedirectToAction("Employee", "Home");
+                }
             }
             return View();
 

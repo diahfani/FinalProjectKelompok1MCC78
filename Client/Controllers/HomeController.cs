@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Client.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Client.Controllers
 {
@@ -12,33 +13,38 @@ namespace Client.Controllers
         {
             _logger = logger;
         }
+        [AllowAnonymous]
         public IActionResult LandingPage()
         {
             return View();
         }
 
-
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
+        [Authorize(Roles = "manager")]
         public IActionResult Manager()
         {
             return View();
         }
+        [Authorize(Roles = "employee")]
         public IActionResult Employee()
         {
-            return View();
+            return View("Views/Home/Employee.cshtml");
         }
+        [Authorize(Roles = "manager")]
         public IActionResult StatusManager()
         {
             return View();
         }
-
+        [Authorize(Roles = "employee")]
         public IActionResult StatusEmployee()
         {
             return View();

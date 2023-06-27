@@ -14,7 +14,7 @@ public class TaskRepository : GeneralRepository<Task, Guid>, ITaskRepository
     {
         httpClient = new HttpClient
         {
-            BaseAddress = new Uri("https://localhost:7032/api/")
+            BaseAddress = new Uri("https://localhost:7046/api/")
         };
         this.request = request;
     }
