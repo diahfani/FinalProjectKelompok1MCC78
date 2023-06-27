@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using System.Security.Claims;
 
 namespace Client.Controllers
 {
@@ -36,10 +37,12 @@ namespace Client.Controllers
             if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                if (User.IsInRole("manager"))
+                
+                if (User.HasClaim(ClaimTypes.Role,"manager"))
                 {
                     return RedirectToAction("Manager", "Home");
-                } else if(User.IsInRole("employee")) {
+                } else if(User.HasClaim(ClaimTypes.Role, "manager"))
+                {
                     return RedirectToAction("Employee", "Home");
                 }
             }

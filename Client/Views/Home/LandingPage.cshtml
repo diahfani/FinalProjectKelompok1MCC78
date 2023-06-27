@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var Jwtoken = ViewData["JWToken"];
 }
 <!doctype html>
 <html class="no-js" lang="en">
@@ -73,7 +74,9 @@
                         
                         <div class="navbar-btn d-none d-sm-inline-block">
                             <ul>
-                                <li><a class="solid" asp-controller="Home" asp-action="Login">Login</a></li>
+                                <li><a id="Jwtoken" class="solid" asp-controller="Account" asp-action="Logins">
+                                    Sign in
+                                    </a></li>
                             </ul>
                         </div>
                     </nav> <!-- navbar -->

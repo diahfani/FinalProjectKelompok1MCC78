@@ -23,7 +23,7 @@ namespace Client.Repositories.Data
         {
             ResponseViewModel<string> entityVM = null;
             StringContent content = new StringContent(JsonConvert.SerializeObject(entity), Encoding.UTF8, "application/json");
-            using (var response = httpClient.PostAsync(request + "Login", content).Result)
+            using (var response = httpClient.PostAsync(request + "login", content).Result)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseViewModel<string>>(apiResponse);

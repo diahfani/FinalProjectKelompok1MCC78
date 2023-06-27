@@ -32,7 +32,7 @@ namespace Client.Controllers
         [Authorize(Roles = "manager")]
         public IActionResult Manager()
         {
-            return View();
+            return View("Views/Home/Manager.cshtml");
         }
         [Authorize(Roles = "employee")]
         public IActionResult Employee()
