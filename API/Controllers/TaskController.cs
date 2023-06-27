@@ -1,8 +1,10 @@
 ﻿using API.Contracts;
 using API.Repositories;
+using API.Utilities;
 using API.ViewModel.Account;
 using API.ViewModel.Other;
 using API.ViewModel.Task;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -20,6 +22,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetTaskByEmployeeId")]
+        [Authorize(Roles = $"{nameof(RoleLevel.employee)}, {nameof(RoleLevel.manager)}")]
         public IActionResult GetTaskByEmployeeId(Guid employeeId)
         {
             var tasks = _taskRepository.GetTaskByEmployeeId(employeeId);

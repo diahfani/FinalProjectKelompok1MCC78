@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ProjectManagementDBContext>(options => options.UseSqlServer(connectionString));
@@ -68,15 +69,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
            };
        });
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(x => {
     x.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "MCC78",
-        Description = "REST API for booking rooms"
+        Title = "Asses Management",
+        Description = "REST API for asses management"
     });
     x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -114,6 +115,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(options => {
+    options.AllowAnyOrigin(); options.AllowAnyHeader(); options.AllowAnyMethod();
+});
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

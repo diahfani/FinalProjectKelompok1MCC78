@@ -79,7 +79,7 @@ public class AccountController : BaseController<Account, AccountVM>
 
     }
 
-    [HttpPost("login")]
+    [HttpPost("Login")]
     [AllowAnonymous]
     public IActionResult Login(LoginVM loginVM)
     {

@@ -1,7 +1,9 @@
 ﻿using API.Contracts;
 using API.Model;
+using API.Utilities;
 using API.ViewModel.Other;
 using API.ViewModel.Report;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -18,6 +20,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpPost("PostSingleFile")]
+    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
     public async Task<IActionResult> PostSingleFile([FromForm] FileUploadAndDownlodVM reportvm)
     {
         if (reportvm is null)
@@ -36,7 +39,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpPut("UpdateSingleReport")]
-    
+    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
     public async Task<IActionResult> UpdateSingleReport([FromForm] FileUploadAndDownlodVM reportvm)
     {
         if (reportvm is null)
@@ -56,6 +59,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpGet("DownloadFile")]
+    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
     public async Task<IActionResult> DownloadFile(Guid guid)
     {
         if (guid == null)

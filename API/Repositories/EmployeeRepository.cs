@@ -44,6 +44,8 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
             Email = employee.Email,
             PhoneNumber = employee.PhoneNumber,
             ManagerID = employee.ManagerID,
+            CreatedDate = employee.CreatedDate,
+            ModifiedDate = employee.ModifiedDate
         };
         return data;
 
@@ -87,13 +89,15 @@ public class EmployeeRepository : GeneralRepository<Employee>, IEmployeeReposito
         var employee = _context.Employees.FirstOrDefault(e => e.Guid == employeeId);
         if (employee == null)
         {
-            return null;
+             employee = null;
         }
 
         var tasks = _context.Tasks.FirstOrDefault(t => t.EmployeeGuid == employeeId);
         var report = _context.Reports.FirstOrDefault(r => r.Guid == tasks.Guid);
         var rating = _context.Ratings.FirstOrDefault(r => r.Guid == tasks.Guid);
-
+        // buat ngecek report atau rating null. kalo null, report dan ratingnya diisi null
+        report ??= null;
+        rating ??= null;
         var data = new DetailVM
         {
             Guid = employee.Guid,
