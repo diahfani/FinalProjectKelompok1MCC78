@@ -65,14 +65,28 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
         }
     }
 
-    public Report GetReportByEmployeeId(Guid employeeId)
-    {
-       return _context.Set<Report>().Find(employeeId);
-    }
-
     public Report GetReportByTaskId(Guid TaskId)
     {
-        return _context.Set<Report>().Find(TaskId);
+        var report = _context.Reports.FirstOrDefault(r => r.Task.Guid == TaskId);
+        return report;
+    }
+
+    public IEnumerable<ReportVM> GetReportByEmployeeId(Guid employeeId)
+    {
+        var reports = _context.Reports.Where(r => r.Task.EmployeeGuid == employeeId)
+                                      .Select(r => new ReportVM
+        {
+            Guid = r.Guid,
+            SubjectReport = r.Subject,
+            DescriptionReport = r.Description,
+            FileName = r.FileName,
+            FileData = r.FileData,
+            FileType = r.FileType,
+            CreatedDate = r.CreatedDate,
+            ModifiedDate = r.ModifiedDate
+        })
+        .ToList();
+        return reports;
     }
 
     public async System.Threading.Tasks.Task UpdateReport(FileUploadAndDownlodVM report)

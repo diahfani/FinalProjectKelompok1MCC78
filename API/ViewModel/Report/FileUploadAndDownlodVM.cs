@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace API.ViewModel.Report
 {
+    [ReportValidation]
     public class FileUploadAndDownlodVM
     {
         public Guid Guid { get; set; }

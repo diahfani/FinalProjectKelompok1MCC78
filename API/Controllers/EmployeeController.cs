@@ -1,7 +1,9 @@
 ﻿using API.Contracts;
 using API.Model;
+using API.Utilities;
 using API.ViewModel.Employee;
 using API.ViewModel.Other;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -29,6 +31,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetEmployeeByManagerId")]
+        [Authorize(Roles = $"{nameof(RoleLevel.manager)}")]
         public IActionResult GetEmployeeById(Guid managerId)
         {
             var employees = _employeeRepository.GetEmployeeByManagerId(managerId);

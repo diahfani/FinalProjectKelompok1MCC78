@@ -9,7 +9,7 @@ namespace API.Contracts
         public System.Threading.Tasks.Task PostFileAsync(FileUploadAndDownlodVM report);
         public System.Threading.Tasks.Task DownloadFileByGuid(Guid guid);
 
-        Report GetReportByEmployeeId(Guid employeeId);
+        IEnumerable<ReportVM> GetReportByEmployeeId(Guid employeeId);
         Report GetReportByTaskId(Guid taskId);
         public System.Threading.Tasks.Task UpdateReport(FileUploadAndDownlodVM report);
     }
