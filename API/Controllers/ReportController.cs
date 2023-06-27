@@ -4,7 +4,13 @@ using API.Utilities;
 using API.ViewModel.Other;
 using API.ViewModel.Report;
 using Microsoft.AspNetCore.Authorization;
+using API.ViewModel.Employee;
+using API.ViewModel.Other;
+using API.ViewModel.Report;
+using API.ViewModel.Task;
+using Azure;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 
 namespace API.Controllers;
@@ -12,11 +18,14 @@ namespace API.Controllers;
 public class ReportController : BaseController<Report, ReportVM>
 {
     private readonly IReportRepository _reportRepository;
-    
+    private readonly ITaskRepository _taskRepository;
 
-    public ReportController(IReportRepository reportRepository, IMapper<Report, ReportVM> mapper) : base(reportRepository, mapper)
+    public ReportController(IReportRepository reportRepository,
+                            ITaskRepository taskRepository,
+                            IMapper<Report, ReportVM> mapper) : base(reportRepository, mapper)
     {
         _reportRepository = reportRepository;
+        _taskRepository = taskRepository;
     }
 
     [HttpPost("PostSingleFile")]
@@ -76,4 +85,89 @@ public class ReportController : BaseController<Report, ReportVM>
             throw;
         }
     }
+
+    [HttpGet("GetReportByTaskId")]
+    public IActionResult GetReportByTaskId(Guid taskId)
+    {
+        try
+        {
+            var report = _reportRepository.GetReportByTaskId(taskId);
+            if (report == null)
+            {
+                return NotFound(new ResponseVM<ReportVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            var reportVM = new ReportVM
+            {
+                Guid = taskId,
+                SubjectReport = report.Subject,
+                DescriptionReport = report.Description,
+                FileName = report.FileName,
+                FileData = report.FileData,
+                FileType = report.FileType,
+                CreatedDate = report.CreatedDate,
+                ModifiedDate = report.ModifiedDate
+            };
+
+            return Ok(new ResponseVM<ReportVM>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK.ToString(),
+                Message = "Success",
+                Data = reportVM
+            });
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    [HttpGet("GetReportByEmployeeId")]
+    public IActionResult GetReportByEmployeeId(Guid employeeId)
+    {
+        try
+        {
+            var reports = _reportRepository.GetReportByEmployeeId(employeeId);
+            if (!reports.Any())
+            {
+                return NotFound(new ResponseVM<ReportVM>
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Status = HttpStatusCode.NotFound.ToString(),
+                    Message = "Not Found"
+                });
+            }
+
+            var reportVM = reports.Select(r => new ReportVM
+            {
+                Guid = r.Guid,
+                SubjectReport = r.SubjectReport,
+                DescriptionReport = r.DescriptionReport,
+                FileName = r.FileName,
+                FileData = r.FileData,
+                FileType = r.FileType,
+                CreatedDate = r.CreatedDate,
+                ModifiedDate = r.ModifiedDate
+            });
+
+            return Ok(new ResponseVM<IEnumerable<ReportVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = StatusCodes.Status200OK.ToString(),
+                Message = "Success",
+                Data = reportVM
+            });
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
 }
