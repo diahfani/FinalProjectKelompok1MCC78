@@ -35,10 +35,10 @@ public class TaskController : Controller
 
 
 
-    /*public async Task<IActionResult> Creates()
+    public async Task<IActionResult> Creates()
     {
         return View();
-    }*/
+    }
 
     [HttpPost]
     public async Task<IActionResult> Creates(Task task)

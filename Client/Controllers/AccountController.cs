@@ -8,22 +8,48 @@ namespace Client.Controllers
     public class AccountController : Controller
     {
         private readonly IAccountRepository repository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(IAccountRepository repository)
+        public AccountController(IAccountRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             this.repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
         public IActionResult Logins()
         {
+            if (HttpContext.Session.GetString("JWToken") != null)
+            {
+                var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+                if (role == "manager")
+                {
+                    return RedirectToAction("Manager", "Account");
+                }
+                else if (role == "employee")
+                {
+                    return RedirectToAction("Employee", "Home");
+                }
+            }
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        /*[ValidateAntiForgeryToken]*/
         public async Task<IActionResult> Logins(LoginVM login)
         {
+            if (HttpContext.Session.GetString("JWToken") != null)
+            {
+                var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+                if (role == "manager")
+                {
+                    return RedirectToAction("Manager", "Account");
+                }
+                else if (role == "employee")
+                {
+                    return RedirectToAction("Employee", "Home");
+                }
+            }
             var result = await repository.Logins(login);
             if (result is null)
             {
@@ -37,14 +63,15 @@ namespace Client.Controllers
             if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                
-                if (User.HasClaim(ClaimTypes.Role,"manager"))
+                return RedirectToAction("LandingPage", "Home");
+               /* var role =  _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+                if (role == "manager")
                 {
                     return RedirectToAction("Manager", "Home");
-                } else if(User.HasClaim(ClaimTypes.Role, "manager"))
+                } else if(role == "employee")
                 {
                     return RedirectToAction("Employee", "Home");
-                }
+                }*/
             }
             return View();
 

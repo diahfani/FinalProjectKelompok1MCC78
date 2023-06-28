@@ -1,6 +1,7 @@
 ﻿using Client.Repositories.Interface;
 using Client.ViewModels;
 using Newtonsoft.Json;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Client.Repositories

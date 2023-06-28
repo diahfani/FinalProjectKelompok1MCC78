@@ -31,7 +31,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetEmployeeByManagerId")]
-        [Authorize(Roles = $"{nameof(RoleLevel.manager)}")]
+        /*[Authorize(Roles = $"{nameof(RoleLevel.manager)}")]*/
         public IActionResult GetEmployeeById(Guid managerId)
         {
             var employees = _employeeRepository.GetEmployeeByManagerId(managerId);

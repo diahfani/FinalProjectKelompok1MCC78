@@ -2,6 +2,7 @@
 using Client.Repositories.Interface;
 using Client.ViewModels;
 using Newtonsoft.Json;
+using System.Text;
 
 namespace Client.Repositories.Data
 {
@@ -25,6 +26,32 @@ namespace Client.Repositories.Data
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseListVM<Employee>>(apiResponse);
+            }
+            return entityVM;
+        }
+
+        public async Task<ResponseListVM<EmployeeVM>> GetEmployeeByManagerID(Guid managerID)
+        {
+            ResponseListVM<EmployeeVM> entityVM = null;
+            using (var response = await httpClient.GetAsync($"{request}GetEmployeeByManagerId?managerId={managerID}"))
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+
+                entityVM = JsonConvert.DeserializeObject<ResponseListVM<EmployeeVM>>(apiResponse);
+                // ngecek kalo datanya cuma satu, diubah dulu ke response view model yg nerima satu data
+                // abis itu diubah ke response list vm
+                /* if (apiResponse.StartsWith("{"))
+                 {
+                     var employee = JsonConvert.DeserializeObject<ResponseViewModel<EmployeeVM>>(apiResponse);
+                     entityVM = new ResponseListVM<EmployeeVM>
+                     {
+                         Data = new List<EmployeeVM> { employee.Data }
+                     };
+                 } else if (apiResponse.StartsWith("["))
+                 {
+                     entityVM = JsonConvert.DeserializeObject<ResponseListVM<EmployeeVM>>(apiResponse);
+
+                 }*/
             }
             return entityVM;
         }

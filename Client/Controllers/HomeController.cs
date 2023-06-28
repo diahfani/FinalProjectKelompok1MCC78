@@ -2,20 +2,28 @@
 using System.Diagnostics;
 using Client.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Runtime.CompilerServices;
 
 namespace Client.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
         [AllowAnonymous]
         public IActionResult LandingPage()
         {
+            string jwToken = HttpContext.Session.GetString("JWToken") ?? "JWT is null";
+            ViewData["JWToken"] = jwToken;
+            var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+            ViewData["Role"] = role;
             return View();
         }
 
@@ -29,12 +37,12 @@ namespace Client.Controllers
         {
             return View();
         }
-        [Authorize(Roles = "manager")]
+        /*[Authorize(Roles = "manager")]*/
         public IActionResult Manager()
         {
             return View("Views/Home/Manager.cshtml");
         }
-        [Authorize(Roles = "employee")]
+        /*[Authorize(Roles = "employee")]*/
         public IActionResult Employee()
         {
             return View("Views/Home/Employee.cshtml");

@@ -1,17 +1,21 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Client.Controllers;
 
 public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository emprepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public EmployeeController(IEmployeeRepository _emprepository)
+    public EmployeeController(IEmployeeRepository _emprepository, IHttpContextAccessor http)
     {
         this.emprepository = _emprepository;
+        _httpContextAccessor = http;
     }
 
     public async Task<IActionResult> Index()
@@ -38,8 +42,33 @@ public class EmployeeController : Controller
         return View(employees);
     }
 
+    [HttpGet]
+    [Authorize(Roles = "manager")]
+    public async Task<IActionResult> Manager()
+    {
+        /*var managerGUID = Guid.Parse(User.Claims.)*/
+        var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await emprepository.GetEmployeeByManagerID(managerID);
+        var employeeManager = new List<Employee>();
 
-
+        if(result.Data!= null)
+        {
+            employeeManager = result.Data.Select(e => new Employee
+            {
+                Guid = e.Guid,
+                NIK = e.NIK,
+                Fullname = e.Fullname,
+                Gender = e.Gender,
+                Email = e.Email,
+                PhoneNumber = e.PhoneNumber,
+                HiringDate = e.HiringDate,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate,
+                ManagerID = e.ManagerID
+            }).ToList();
+        }
+        return View(employeeManager);
+    }
     /*public Task<IActionResult> Creates()
     {
         return View();
