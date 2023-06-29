@@ -125,13 +125,13 @@ namespace Client.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            else if (result.StatusCode == "409")
+            else if (result.StatusCode == 409)
             {
                 ModelState.AddModelError(string.Empty, result.Message);
                 TempData["Error"] = $"Something Went Wrong! - {result.Message}!";
                 return View();
             }
-            else if (result.StatusCode == "200")
+            else if (result.StatusCode == 200)
             {
                 TempData["Success"] = $"Data has been Successfully Registered! - {result.Message}!";
                 return RedirectToAction("Login", "Account");

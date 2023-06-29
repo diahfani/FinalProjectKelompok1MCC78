@@ -43,7 +43,7 @@ public class EmployeeController : Controller
     }
 
     [HttpGet]
-    [Authorize(Roles = "manager")]
+    /*[Authorize(Roles = "manager")]*/
     public async Task<IActionResult> Manager()
     {
         /*var managerGUID = Guid.Parse(User.Claims.)*/

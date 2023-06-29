@@ -42,7 +42,7 @@ public class TaskController : Controller
 
    /* [HttpGet]
     [Authorize(Roles = "manager")]*/
-    public async Task<IActionResult> CreatesGet()
+    public async Task<IActionResult> Creates()
     {
         /*var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
         var result = await emprepository.GetEmployeeByManagerID(managerID);
@@ -70,20 +70,20 @@ public class TaskController : Controller
 
     [HttpPost]
     /*[Authorize(Roles = "manager")]*/
-    public async Task<IActionResult> CreatesPost(Task task)
+    public async Task<IActionResult> Creates(Task task)
     {
         var result = await tasrepository.Post(task);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
-            return RedirectToAction("Creates", "Task");
+            return Redirect("/Task/Creates");
         }
-        else if (result.StatusCode == "409")
+        else if (result.StatusCode == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return Redirect("/Task/Creates");
     }
 
     public async Task<IActionResult> Deletes(Guid guid)
@@ -110,7 +110,7 @@ public class TaskController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await tasrepository.Deletes(guid);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -123,11 +123,11 @@ public class TaskController : Controller
 
 
         var result = await tasrepository.Put(task);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == "409")
+        else if (result.StatusCode == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

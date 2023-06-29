@@ -42,11 +42,11 @@ public class ReportController : Controller
     public async Task<IActionResult> Creates(Report report)
     {
         var result = await reprepository.Post(report);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == "409")
+        else if (result.StatusCode == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
@@ -78,7 +78,7 @@ public class ReportController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await reprepository.Deletes(guid);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -91,11 +91,11 @@ public class ReportController : Controller
 
 
         var result = await reprepository.Put(report);
-        if (result.StatusCode == "200")
+        if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == "409")
+        else if (result.StatusCode == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

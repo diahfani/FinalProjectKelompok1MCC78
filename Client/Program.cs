@@ -50,7 +50,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // custom error page
-app.UseStatusCodePages(async context =>
+/*app.UseStatusCodePages(async context =>
 {
     var response = context.HttpContext.Response;
 
@@ -66,7 +66,7 @@ app.UseStatusCodePages(async context =>
     {
         response.Redirect("/Forbidden");
     }
-});
+});*/
 
 app.UseSession();
 app.Use(async (context, next) =>
@@ -86,6 +86,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=LandingPage}/{id?}");
+    pattern: "{controller=Task}/{action=Creates}/{id?}");
 
 app.Run();
