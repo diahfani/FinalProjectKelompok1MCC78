@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Manager";
     Layout = null;
+    string fullname = User.Identity.Name;
 }
 
 
@@ -45,7 +46,7 @@
                             </a>
                         </li>
                         <li class="">
-                            <a asp-controller="Home" asp-action="Manager" class="svg-icon">
+                            <a asp-controller="Task" asp-action="Creates" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -92,7 +93,7 @@
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img src="~/assets/images/user/1.jpg" class="img-fluid rounded-circle" alt="user">
                                         <div class="caption ml-3">
-                                            <h6 class="mb-0 line-height">Savannah Nguyen<i class="las la-angle-down ml-2"></i></h6>
+                                            <h6 class="mb-0 line-height">@fullname<i class="las la-angle-down ml-2"></i></h6>
                                         </div>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-right border-none" aria-labelledby="dropdownMenuButton">
@@ -101,7 +102,7 @@
                                             <svg class="svg-icon mr-0 text-primary" id="h-05-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                             </svg>
-                                            <a asp-controller="Home" asp-action="Login">Logout</a>
+                                            <a asp-controller="Account" asp-action="Logout">Logout</a>
                                         </li>
                                     </ul>
                                 </li>

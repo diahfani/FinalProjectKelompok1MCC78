@@ -15,6 +15,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped(typeof(IRepository<,>), typeof(GeneralRepository<,>));
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        .AddJwtBearer(options => {
@@ -49,7 +50,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // custom error page
-app.UseStatusCodePages(async context => {
+app.UseStatusCodePages(async context =>
+{
     var response = context.HttpContext.Response;
 
     if (response.StatusCode.Equals((int)HttpStatusCode.Unauthorized))

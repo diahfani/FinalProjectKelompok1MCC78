@@ -78,7 +78,7 @@ namespace API.Controllers
             var result = _repository.Create(model);
             if (result is null)
             {
-                return NotFound(new ResponseVM<TViewModel>
+                return BadRequest(new ResponseVM<TViewModel>
                 {
                     Code = StatusCodes.Status400BadRequest,
                     Status = HttpStatusCode.BadRequest.ToString(),
@@ -102,10 +102,10 @@ namespace API.Controllers
             var isUpdated = _repository.Update(model);
             if (!isUpdated)
             {
-                return NotFound(new ResponseVM<TViewModel>
+                return BadRequest(new ResponseVM<TViewModel>
                 {
-                    Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
                     Message = "Update Failed"
                 });
             }
@@ -124,10 +124,10 @@ namespace API.Controllers
             var isDeleted = _repository.Delete(guid);
             if (!isDeleted)
             {
-                return NotFound(new ResponseVM<TViewModel>
+                return BadRequest(new ResponseVM<TViewModel>
                 {
                     Code = StatusCodes.Status404NotFound,
-                    Status = HttpStatusCode.NotFound.ToString(),
+                    Status = HttpStatusCode.BadRequest.ToString(),
                     Message = "Delete Failed"
                 });
             }

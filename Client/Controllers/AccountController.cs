@@ -2,6 +2,7 @@
 using Client.Repositories.Interface;
 using Client.ViewModels;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Client.Controllers
 {
@@ -51,7 +52,22 @@ namespace Client.Controllers
                 }
             }
             var result = await repository.Logins(login);
-            if (result is null)
+            var token = result.Data;
+            var claims = ExtractClaims(token);
+            var getRole =  "";
+/*            Console.WriteLine(claims);
+*/            foreach(var claim in claims)
+            {
+                if (claim.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
+                {
+                    getRole = claim.Value;
+                   /* Console.WriteLine($"Claim Type: {claim.Type} - Claim Value: {claim.Value}");
+                    HttpContext.Session.SetString("Role", claim.Value);*/
+                }
+                
+            }
+/*            Console.WriteLine(getRole);
+*/            if (result is null)
             {
                 return RedirectToAction("Error", "Home");
             }
@@ -63,18 +79,27 @@ namespace Client.Controllers
             if (result.Code == 200)
             {
                 HttpContext.Session.SetString("JWToken", result.Data);
-                return RedirectToAction("LandingPage", "Home");
-               /* var role =  _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
-                if (role == "manager")
+                /*return RedirectToAction("LandingPage", "Home");*/
+                /*var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);*/
+                if (getRole == "manager")
                 {
-                    return RedirectToAction("Manager", "Home");
-                } else if(role == "employee")
+                    return RedirectToAction("Manager", "Employee");
+                }
+                else if (getRole == "employee")
                 {
                     return RedirectToAction("Employee", "Home");
-                }*/
+                }
             }
             return View();
 
+        }
+
+        public IEnumerable<Claim> ExtractClaims(string jwtToken)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken securityToken = (JwtSecurityToken)tokenHandler.ReadToken(jwtToken);
+            IEnumerable<Claim> claims = securityToken.Claims;
+            return claims;
         }
 
         [HttpGet("/Logout")]
