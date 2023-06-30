@@ -9,7 +9,6 @@ namespace Client.ViewModels
         public string Fullname { get; set; }
         public string NIK { get; set; }
         public string Email { get; set; }
-
         public GenderLevel Gender { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime HiringDate { get; set; }

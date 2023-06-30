@@ -6,6 +6,7 @@ namespace Client.Repositories.Interface;
 
 public interface ITaskRepository : IRepository<Task, Guid>
 {
-    public Task<ResponseListVM<Task>> GetTask();
+    /*public Task<ResponseListVM<Task>> GetTask();*/
+    public Task<ResponseListVM<Task>> GetTaskByEmployeeId(Guid employeeid);
 
 }

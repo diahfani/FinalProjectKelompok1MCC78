@@ -19,14 +19,27 @@ public class TaskRepository : GeneralRepository<Task, Guid>, ITaskRepository
         this.request = request;
     }
 
-    public async Task<ResponseListVM<Task>> GetTask()
+    public async Task<ResponseListVM<Task>> GetTaskByEmployeeId(Guid employeeid)
     {
         ResponseListVM<Task> entityVM = null;
-        using (var response = httpClient.GetAsync(request + "GetAllMasterEmployee").Result)
+        using (var response = await httpClient.GetAsync($"{request}GetTaskByEmployeeId?employeeId={employeeid}"))
         {
             string apiResponse = await response.Content.ReadAsStringAsync();
+
             entityVM = JsonConvert.DeserializeObject<ResponseListVM<Task>>(apiResponse);
         }
         return entityVM;
     }
-}
+
+        /*    public async Task<ResponseListVM<Task>> GetTask()
+            {
+                ResponseListVM<Task> entityVM = null;
+                using (var response = httpClient.GetAsync(request + "GetAllMasterEmployee").Result)
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    entityVM = JsonConvert.DeserializeObject<ResponseListVM<Task>>(apiResponse);
+                }
+                return entityVM;
+            }
+        */
+ }

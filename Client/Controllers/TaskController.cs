@@ -2,6 +2,7 @@
 using Client.Repositories.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using Task = Client.Models.Task;
 
@@ -22,7 +23,27 @@ public class TaskController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var result = await tasrepository.Get();
+        var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var results = await emprepository.GetEmployeeByManagerID(managerID);
+        var employeeId = new List<Guid>();
+        var taskList = new List<Task>();
+        var taskEmp = new ViewModels.ResponseListVM<Models.Task>();
+        foreach (var i in results.Data)
+        {
+            employeeId.Add(i.Guid);
+        }
+        foreach(var gettask in employeeId)
+        {
+            taskEmp = await tasrepository.GetTaskByEmployeeId(gettask);
+            foreach(var task in taskEmp.Data)
+            {
+                taskList.Add(task);
+            }
+        }
+        Console.Write(taskEmp);
+        Console.Write(taskList);
+        return View(taskList);
+        /*var result = await tasrepository.Get();
         var tasks = new List<Task>();
 
         if (result.Data != null)
@@ -36,7 +57,7 @@ public class TaskController : Controller
 
             }).ToList();
         }
-        return View(tasks);
+        return View(tasks);*/
     }
 
 
