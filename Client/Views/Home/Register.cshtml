@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Client.Models.RegisterVM
+
+@{
     Layout = null;
 }
 
@@ -31,6 +33,14 @@
                                  <p>Create your Webkit account.</p>
                                  <form>
                                     <div class="row">
+                                        <div class="col-lg-6" hidden>
+                                          <div class="floating-label form-group">
+                                               <label asp-for="Guid" class="control-label"></label>
+                                                <input asp-for="Guid" class="floating-input form-control" value ="0" type="text" placeholder=" "/>
+                                                <span asp-validation-for="Guid" class="text-danger"></span>
+                                             <label>Guid</label>
+                                          </div>
+                                       </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
                                              <input class="floating-input form-control" type="text" placeholder=" ">
@@ -39,32 +49,50 @@
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input class="floating-input form-control" type="text" placeholder=" ">
-                                             <label>Last Name</label>
+                                                <input asp-for="NIK" class="floating-input form-control" type="text" placeholder=" " />
+                                             <label>NIK</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input class="floating-input form-control" type="email" placeholder=" ">
+                                              <input asp-for="Email" class="floating-input form-control" type="text" placeholder=" "/>
                                              <label>Email</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input class="floating-input form-control" type="text" placeholder=" ">
-                                             <label>Phone No.</label>
+                                             <input asp-for="Gender" class="floating-input form-control" type="text" placeholder=" " />
+                                             <label>Gender</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input class="floating-input form-control" type="password" placeholder=" ">
+                                             <input asp-for="PhoneNumber" class="floating-input form-control" type="text" placeholder=" " />
+                                             <label>PhoneNumber</label>
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6">
+                                          <div class="floating-label form-group">
+                                             <input asp-for="HiringDate" class="floating-input form-control" type="text" placeholder=" " />
+                                             <label>HiringDate</label>
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6" hidden>
+                                          <div class="floating-label form-group">
+                                             <input asp-for="ManagerID" class="floating-input form-control" type="text" placeholder=" " />
+                                             <label>ManagerID</label>
+                                          </div>
+                                       </div>
+                                       <div class="col-lg-6">
+                                          <div class="floating-label form-group">
+                                             <input asp-for="Password" class="floating-input form-control" type="password" placeholder=" ">
                                              <label>Password</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input class="floating-input form-control" type="password" placeholder=" ">
-                                             <label>Confirm</label>
+                                             <input asp-for="ConfirmPassword" class="floating-input form-control" type="password" placeholder=" ">
+                                             <label>ConfirmPassword</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-12">
