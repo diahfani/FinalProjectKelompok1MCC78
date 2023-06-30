@@ -5,7 +5,6 @@ namespace Client.ViewModels
 {
     public class RegisterVM
     {
-        public Guid? Guid { get; set; }
 
         public string Fullname { get; set; }
         public string NIK { get; set; }
@@ -18,4 +17,5 @@ namespace Client.ViewModels
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
     }
+
 }
