@@ -22,7 +22,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetTaskByEmployeeId")]
-        [Authorize(Roles = $"{nameof(RoleLevel.employee)}, {nameof(RoleLevel.manager)}")]
+        /*[Authorize(Roles = $"{nameof(RoleLevel.employee)}, {nameof(RoleLevel.manager)}")]*/
         public IActionResult GetTaskByEmployeeId(Guid employeeId)
         {
             var tasks = _taskRepository.GetTaskByEmployeeId(employeeId);
