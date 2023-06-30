@@ -178,7 +178,7 @@ public class TaskController : Controller
         var result = await tasrepository.Put(task);
         if (result.Message == "Update success")
         {
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Task/Index");
         }
         else if (result.Message != "Update success")
         {
@@ -186,7 +186,7 @@ public class TaskController : Controller
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return Redirect("/Task/Index");
     }
 
     [HttpGet]

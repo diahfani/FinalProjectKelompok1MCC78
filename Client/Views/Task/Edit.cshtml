@@ -146,6 +146,7 @@
                                     <div class="form-group">
                                         <label asp-for="EmployeeGuid">Assigned to</label>
                                         <select asp-for="EmployeeGuid" class="selectpicker form-control" data-style="py-0">
+                                            <option selected>---Pilih Karyawan---</option>
                                             @foreach (var item in ViewBag.EmployeeManager)
                                             {
                                                 <option asp-for="EmployeeGuid" value="@item.Guid">@item.Fullname</option>
