@@ -1,0 +1,157 @@
+﻿@model Client.Models.Rating
+
+@{
+    ViewData["Title"] = "Creates";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        .rating-stars {
+            color: rgb(219, 219, 219);
+        }
+
+        .rating-stars .fa-star {
+            font-size: 20px;
+        }
+
+        .rating-stars .fa-star.checked {
+            color: gold;
+        }
+
+        .custom-textbox {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <h1>Index</h1>
+
+    <p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
+            Create New
+        </button>
+    </p>
+    <!-- Rating Modal -->
+    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form asp-action="Creates" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group" >
+                <label asp-for="Guid" class="control-label"></label>
+                <input asp-for="Guid" class="form-control" />
+                <span asp-validation-for="Guid" class="text-danger"></span>
+            </div>
+
+                        <div class="form-group">
+                <label asp-for="RatingValue" class="control-label"></label>
+                <input asp-for="RatingValue" class="form-control" value=""/>
+                <span asp-validation-for="RatingValue" class="text-danger"></span>
+            </div>
+
+                        <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
+                        
+            <div class="form-group" hidden>
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" value=""/>
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="ModifiedDate" class="control-label"></label>
+                <input asp-for="ModifiedDate" class="form-control" />
+                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+            </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.modal').on('shown.bs.modal', function () {
+                var modalId = $(this).attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = $('#ratingValue_' + ratingId).val();
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).data('rating-value') <= ratingValue) {
+                        $(this).addClass('checked');
+                    } else {
+                        $(this).removeClass('checked');
+                    }
+                });
+            });
+
+            $('.modal form').submit(function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                var modalId = $(this).closest('.modal').attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = 0;
+
+                // Determine the selected rating value
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).hasClass('checked')) {
+                        ratingValue = $(this).data('rating-value');
+                    }
+                });
+
+                // Get the comment value
+                var comment = $('#comment_' + ratingId).val();
+
+                // Set the values in the hidden input fields
+                $('#ratingValue_' + ratingId).val(ratingValue);
+
+                // Submit the form
+                $(this).off('submit').submit();
+            });
+        });
+
+        function updateRating(guid, rating) {
+            var ratingStars = $('#ratingStars_' + guid + ' span');
+            ratingStars.each(function (index) {
+                if (index < rating) {
+                    $(this).addClass('checked');
+                } else {
+                    $(this).removeClass('checked');
+                }
+            });
+
+            // Mengatur nilai rating pada atribut data-rating-value
+            $('#ratingStars_' + guid).data('rating-value', rating);
+        }
+
+        function updateCreateRating(rating) {
+            var createRatingStars = $('#createRatingStars span');
+            createRatingStars.each(function (index) {
+                if (index < rating) {
+                    $(this).addClass('checked');
+                } else {
+                    $(this).removeClass('checked');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

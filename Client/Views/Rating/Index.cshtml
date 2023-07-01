@@ -1,23 +1,20 @@
-﻿@model Client.Models.Rating
+﻿@model IEnumerable<Client.Models.Rating>
 
 @{
     Layout = null;
 }
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
-
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>StatusManager</title>
-      
-      <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
+    <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
       <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
       <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
-      
     <style>
         .rating-stars {
             color: rgb(219, 219, 219);
@@ -37,15 +34,14 @@
             resize: vertical;
         }
     </style>
-
-  </head>
-  <body class="  ">
+</head>
+<body>
     <!-- Wrapper Start -->
     <div class="wrapper">
       
       <div class="iq-sidebar  sidebar-default ">
           <div class="iq-sidebar-logo d-flex align-items-center">
-              <a asp-controller="Home" asp-action="StatusManager" class="header-logo">
+              <a asp-controller="Home" asp-action="StatusEmployee" class="header-logo">
                   <img src="~/assets/images/logo.svg" alt="logo">
                   <h3 class="logo-title light-logo">Status</h3>
               </a>
@@ -56,26 +52,16 @@
           <div class="data-scrollbar" data-scroll="1">
               <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li class="">
-                            <a asp-controller="Employee" asp-action="Manager" class="svg-icon">
-                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                </svg>
-                                <span class="ml-4">Dashboard</span>
-                            </a>
-                        </li>
                       <li class="">
-                          <a asp-controller="Home" asp-action="Manager" class="svg-icon">                        
+                          <a asp-controller="Home" asp-action="Employee" class="svg-icon">                        
                               <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                                  <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
                               </svg>
-                              <span class="ml-4">Manager</span>
+                              <span class="ml-4">Employee</span>
                           </a>
                       </li>
                       <li class="active">
-                          <a asp-controller="Home" asp-action="StatusManager" class="svg-icon">                        
+                          <a asp-controller="Home" asp-action="StatusEmployee" class="svg-icon">                        
                               <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                   <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -148,6 +134,7 @@
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
                     <tbody>
+                        
                         <tr>
                             <td>Karyawan 1</td>
                             <td>
@@ -157,7 +144,11 @@
                                 <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
                             </td>
                             <td>
-                               <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light">Rating</a>
+                                
+                                @foreach (var item in Model)
+            {
+                               <a data-toggle="modal" data-target="#ratingModal_@item.Guid" class="btn bg-info-light">Rating</a>
+            }
                             </td>
                             <td>
                                
@@ -193,21 +184,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText4" class="h5">Assigned to</label>
-                                                                <div class="custom-file">
-                                                                     <label class="custom-file-label2" for="inputGroupFile002">Nama Karyawan</label>
-                                                                </div>
-                                                            </div>                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
                                             <div class="card mb-3">
                                                 <div class="card-body">
                                                     <div class="row">
@@ -268,14 +245,6 @@
                                                                     </div>
                                                             </div>                        
                                                         </div>
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText01" class="h5"></label>
-                                                                 <div class="custom-file">
-                                                                    <button style="margin-top:6px;" class="btn bg-info-light">Download</button>
-                                                                     </div>
-                                                            </div>                        
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,58 +257,55 @@
     </div>
       </div>
     </div>
-    <!-- Wrapper End-->
 
-    <!-- Modal list start --> 
-    <!-- Rating Modal -->
-    <!-- Rating Modal -->
-    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+     @foreach (var item in Model)
+            {
+                <!-- Modal -->
+<div class="modal fade" id="ratingModal_@item.Guid" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel_@item.Guid" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ratingModalLabel_@item.Guid">Rating</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                     <input type="hidden" name="guid" value="@item.Guid" />
+                    <input type="hidden" name="ratingValue" value="@item.RatingValue" />
+
+                <div class="rating-stars" id="ratingStars_@item.Guid" value="@item.RatingValue">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= item.RatingValue)
+                        {
+                            <span class="fa fa-star checked" onclick="updateRating('@item.Guid', @i)"></span>
+                        }
+                        else
+                        {
+                            <span class="fa fa-star" onclick="updateRating('@item.Guid', @i)"></span>
+                        }
+                    }
                 </div>
-                <div class="modal-body">
-                    <form asp-controller="Rating" asp-action="Creates" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group" >
-                <label asp-for="Guid" class="control-label"></label>
-                <input asp-for="Guid" class="form-control" />
-                <span asp-validation-for="Guid" class="text-danger"></span>
-            </div>
+                
+                   
 
-                        <div class="form-group">
-                <label asp-for="RatingValue" class="control-label"></label>
-                <input asp-for="RatingValue" class="form-control" value=""/>
-                <span asp-validation-for="RatingValue" class="text-danger"></span>
-            </div>
+                    <textarea class="custom-textbox" name="comment">@item.Comment</textarea>
 
-                        <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
-                        
-            <div class="form-group" hidden>
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" value=""/>
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    
+</div>
+
+            }
+
 
     <script>
         $(document).ready(function () {
@@ -382,38 +348,29 @@
         });
 
         function updateRating(guid, rating) {
-            var ratingStars = $('#ratingStars_' + guid + ' span');
-            ratingStars.each(function (index) {
-                if (index < rating) {
-                    $(this).addClass('checked');
-                } else {
-                    $(this).removeClass('checked');
-                }
-            });
+        var ratingStars = $('#ratingStars_' + guid + ' span');
+        ratingStars.each(function (index) {
+            if (index < rating) {
+                $(this).addClass('checked');
+            } else {
+                $(this).removeClass('checked');
+            }
+        });
 
-            // Mengatur nilai rating pada atribut data-rating-value
-            $('#ratingStars_' + guid).data('rating-value', rating);
-        }
-
-        function updateCreateRating(rating) {
-            var createRatingStars = $('#createRatingStars span');
-            createRatingStars.each(function (index) {
-                if (index < rating) {
-                    $(this).addClass('checked');
-                } else {
-                    $(this).removeClass('checked');
-                }
-            });
-        }
+        // Mengatur nilai rating pada atribut data-rating-value
+        $('#ratingStars_' + guid).data('rating-value', rating);
+    }
     </script>
-    
-    <!-- Backend Bundle JavaScript -->
+
+
+     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
-    
     
     <!-- Chart Custom JavaScript -->
     <script async src="~/assets/js/chart-custom.js"></script>
     <script src="~/assets/js/app.js"></script>
-    
-  </body>
+
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
 </html>

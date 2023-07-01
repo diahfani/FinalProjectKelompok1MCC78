@@ -21,7 +21,7 @@ public class RatingRepository : GeneralRepository<Rating, Guid>, IRatingReposito
     public async Task<ResponseListVM<Rating>> GetRating()
     {
         ResponseListVM<Rating> entityVM = null;
-        using (var response = httpClient.GetAsync(request + "GetAllMasterEmployee").Result)
+        using (var response = httpClient.GetAsync(request + "Rating").Result)
         {
             string apiResponse = await response.Content.ReadAsStringAsync();
             entityVM = JsonConvert.DeserializeObject<ResponseListVM<Rating>>(apiResponse);

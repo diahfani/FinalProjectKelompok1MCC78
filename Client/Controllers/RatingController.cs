@@ -24,7 +24,9 @@ public class RatingController : Controller
             {
                 Guid = e.Guid,
                 RatingValue = e.RatingValue,
-                Comment = e.Comment
+                Comment = e.Comment,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate
             }).ToList();
         }
         return View(ratings);
@@ -67,6 +69,8 @@ public class RatingController : Controller
             rating.Guid = result.Data.Guid;
             rating.RatingValue = result.Data.RatingValue;
             rating.Comment = result.Data.Comment;
+            rating.CreatedDate = result.Data.CreatedDate;
+            rating.ModifiedDate = result.Data.ModifiedDate;
 
         }
         return View(rating);
@@ -102,7 +106,6 @@ public class RatingController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    [HttpGet]
     public async Task<IActionResult> Edit(Guid guid)
     {
         var result = await ratrepository.Get(guid);
@@ -116,6 +119,8 @@ public class RatingController : Controller
             rating.Guid = result.Data.Guid;
             rating.RatingValue = result.Data.RatingValue;
             rating.Comment = result.Data.Comment;
+            rating.CreatedDate = result.Data.CreatedDate;
+            rating.ModifiedDate = result.Data.ModifiedDate;
         }
 
         return View(rating);
