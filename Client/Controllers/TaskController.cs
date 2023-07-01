@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
@@ -28,6 +29,7 @@ public class TaskController : Controller
         var employeeId = new List<Guid>();
         var taskList = new List<Task>();
         var taskEmp = new ViewModels.ResponseListVM<Models.Task>();
+        var taskListEmp = new List<TaskEmployeeVM>();
         foreach (var i in results.Data)
         {
             employeeId.Add(i.Guid);
@@ -40,9 +42,37 @@ public class TaskController : Controller
                 taskList.Add(task);
             }
         }
-        Console.Write(taskEmp);
-        Console.Write(taskList);
-        return View(taskList);
+        foreach(var j in taskList)
+        {
+            var getemp = await emprepository.Get(j.EmployeeGuid);
+            var tasklistemployee = new TaskEmployeeVM
+            {
+                Guid = j.Guid,
+                Subject = j.Subject,
+                Description = j.Description,
+                Deadline = j.Deadline,
+                EmployeeGuid = j.EmployeeGuid,
+                CreatedDate = j.CreatedDate,
+                ModifiedDate = j.ModifiedDate,
+                Employee = new EmployeeVM
+                {
+                    Guid = getemp.Data.Guid,
+                    NIK = getemp.Data.NIK,
+                    Fullname = getemp.Data.Fullname,
+                    Gender = getemp.Data.Gender,
+                    Email = getemp.Data.Email,
+                    PhoneNumber = getemp.Data.PhoneNumber,
+                    HiringDate = getemp.Data.HiringDate,
+                    CreatedDate = getemp.Data.CreatedDate,
+                    ModifiedDate = getemp.Data.ModifiedDate,
+                    ManagerID = getemp.Data.ManagerID
+                }
+            };
+            taskListEmp.Add(tasklistemployee);
+        }
+/*        Console.Write(taskEmp);
+        Console.Write(taskList);*/
+        return View(taskListEmp);
         /*var result = await tasrepository.Get();
         var tasks = new List<Task>();
 
@@ -65,7 +95,7 @@ public class TaskController : Controller
     [Authorize(Roles = "manager")]*/
     public async Task<IActionResult> Creates()
     {
-        /*var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
         var result = await emprepository.GetEmployeeByManagerID(managerID);
         var employeeManager = new List<Employee>();
 
@@ -85,7 +115,7 @@ public class TaskController : Controller
                 ManagerID = e.ManagerID
             }).ToList();
         }
-        ViewData["EmployeeManager"] = employeeManager;*/
+        ViewBag.EmployeeManager = employeeManager;
         return View();
     }
 
@@ -121,7 +151,9 @@ public class TaskController : Controller
             task.Subject = result.Data.Subject;
             task.Description = result.Data.Description;
             task.Deadline = result.Data.Deadline;
-
+            task.EmployeeGuid = result.Data.EmployeeGuid;
+            task.ModifiedDate = result.Data.ModifiedDate;
+            task.CreatedDate = result.Data.CreatedDate;
 
         }
         return View(task);
@@ -131,7 +163,7 @@ public class TaskController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await tasrepository.Deletes(guid);
-        if (result.StatusCode == 200)
+        if (result.Message == "Delete Success")
         {
             return RedirectToAction(nameof(Index));
         }
@@ -144,22 +176,44 @@ public class TaskController : Controller
 
 
         var result = await tasrepository.Put(task);
-        if (result.StatusCode == 200)
+        if (result.Message == "Update success")
         {
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Task/Index");
         }
-        else if (result.StatusCode == 409)
+        else if (result.Message != "Update success")
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return Redirect("/Task/Index");
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(Guid guid)
     {
+        var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var resultManager = await emprepository.GetEmployeeByManagerID(managerID);
+        var employeeManager = new List<Employee>();
+
+        if (resultManager.Data != null)
+        {
+            employeeManager = resultManager.Data.Select(e => new Employee
+            {
+                Guid = e.Guid,
+                NIK = e.NIK,
+                Fullname = e.Fullname,
+                Gender = e.Gender,
+                Email = e.Email,
+                PhoneNumber = e.PhoneNumber,
+                HiringDate = e.HiringDate,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate,
+                ManagerID = e.ManagerID
+            }).ToList();
+        }
+        ViewBag.EmployeeManager = employeeManager;
+
         var result = await tasrepository.Get(guid);
         var task = new Task();
         if (result.Data?.Guid is null)
@@ -171,7 +225,10 @@ public class TaskController : Controller
             task.Guid = result.Data.Guid;
             task.Subject = result.Data.Subject;
             task.Description = result.Data.Description;
+            task.EmployeeGuid = result.Data.EmployeeGuid;
             task.Deadline = result.Data.Deadline;
+            task.ModifiedDate = result.Data.ModifiedDate;
+            task.CreatedDate = result.Data.CreatedDate;
         }
 
         return View(task);

@@ -1,8 +1,6 @@
-﻿using API.Utilities;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Client.Utilities;
 
-namespace API.ViewModel.Report;
+namespace Client.ViewModels;
 
 public class ReportVM
 {
@@ -14,5 +12,4 @@ public class ReportVM
     public FileType FileType { get; set; }
     public DateTime? CreatedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }
-
 }
