@@ -1,9 +1,8 @@
 ﻿using Client.Utilities;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Client.Models
+namespace Client.ViewModels
 {
-    public class Report
+    public class ReportTaskVM
     {
         public Guid Guid { get; set; }
         public string Subject { get; set; }
@@ -14,5 +13,6 @@ namespace Client.Models
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
 
+        public Models.Task Task { get; set }
     }
 }

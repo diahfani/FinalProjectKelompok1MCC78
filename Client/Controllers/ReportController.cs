@@ -1,8 +1,11 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Security.Claims;
+using File = Client.Models.File;
 
 namespace Client.Controllers;
 
@@ -23,20 +26,26 @@ public class ReportController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var result = await reprepository.Get();
-        var reports = new List<Report>();
+        /*var employeeId = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await tasrepository.GetTaskByEmployeeId(employeeId);
+        var taskId = new List<Guid>();
+        var reportList = new List<Report>();
+        var taskRep = new ViewModels.ResponseListVM<ReportVM>();
+        var reportlistEmp = new List<ReportTaskVM>();
 
-        if (result.Data != null)
+        foreach (var i in result.Data)
         {
-            reports = result.Data.Select(e => new Report
-            {
-                Guid = e.Guid,
-                Subject = e.Subject,
-                Description = e.Description
-
-            }).ToList();
+            taskId.Add(i.Guid);
         }
-        return View(reports);
+        foreach (var getreport in taskId)
+        {
+            taskRep = await reprepository.GetReportByTaskId(getreport);
+            foreach (var rep in taskRep.Data)
+            {
+                reportList.Add(rep);
+            }
+        }*/
+        return View();
     }
 
     public async Task<IActionResult> IndexManager()
@@ -140,12 +149,12 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Creates(Report report)
+    public async Task<IActionResult> Creates(File file)
     {
-        var result = await reprepository.Post(report);
+        var result = await reprepository.Post(file);
         if (result.StatusCode == 200)
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("/Report/Creates");
         }
         else if (result.StatusCode == 409)
         {
@@ -153,7 +162,7 @@ public class ReportController : Controller
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("/Report/Creates");
     }
 
     public async Task<IActionResult> Deletes(Guid guid)
@@ -207,11 +216,11 @@ public class ReportController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Report report)
+    public async Task<IActionResult> Edit(File file)
     {
 
 
-        var result = await reprepository.Put(report);
+        var result = await reprepository.Put(file);
         if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
