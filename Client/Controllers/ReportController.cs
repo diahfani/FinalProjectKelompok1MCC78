@@ -1,16 +1,24 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Client.Controllers;
 
 public class ReportController : Controller
 {
     private readonly IReportRepository reprepository;
+    private readonly IHttpContextAccessor _httpContextAcessor;
+    private readonly IEmployeeRepository emprepository;
+    private readonly ITaskRepository tasrepository;
 
-    public ReportController(IReportRepository _reprepository)
+    public ReportController(IReportRepository _reprepository, IHttpContextAccessor httpContextAcessor, IEmployeeRepository emprepository, ITaskRepository tasrepository)
     {
         this.reprepository = _reprepository;
+        _httpContextAcessor = httpContextAcessor;
+        this.emprepository = emprepository;
+        this.tasrepository = tasrepository;
     }
 
     public async Task<IActionResult> Index()
@@ -31,7 +39,100 @@ public class ReportController : Controller
         return View(reports);
     }
 
+    public async Task<IActionResult> IndexManager()
+    {
+        var managerID = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var results = await emprepository.GetEmployeeByManagerID(managerID);
+        var employeeId = new List<Guid>();
+        var taskList = new List<Models.Task>();
+        var taskEmp = new ViewModels.ResponseListVM<Models.Task>();
+        var taskReportEmp = new List<TaskReportEmployeeVM>();
+        foreach (var i in results.Data)
+        {
+            employeeId.Add(i.Guid);
+        }
+        foreach (var gettask in employeeId)
+        {
+            taskEmp = await tasrepository.GetTaskByEmployeeId(gettask);
+            foreach (var task in taskEmp.Data)
+            {
+                taskList.Add(task);
+            }
+        }
+        foreach (var j in taskList)
+        {
+            var getemp = await emprepository.Get(j.EmployeeGuid);
+            var getReport = await reprepository.GetReportByTaskId(j.Guid);
+            if (getReport.Data != null)
+            {
+                var tasklistemployee = new TaskReportEmployeeVM
+                {
+                    Guid = j.Guid,
+                    Subject = j.Subject,
+                    Description = j.Description,
+                    Deadline = j.Deadline,
+                    EmployeeGuid = j.EmployeeGuid,
+                    CreatedDate = j.CreatedDate,
+                    ModifiedDate = j.ModifiedDate,
+                    Employee = new EmployeeVM
+                    {
+                        Guid = getemp.Data.Guid,
+                        NIK = getemp.Data.NIK,
+                        Fullname = getemp.Data.Fullname,
+                        Gender = getemp.Data.Gender,
+                        Email = getemp.Data.Email,
+                        PhoneNumber = getemp.Data.PhoneNumber,
+                        HiringDate = getemp.Data.HiringDate,
+                        CreatedDate = getemp.Data.CreatedDate,
+                        ModifiedDate = getemp.Data.ModifiedDate,
+                        ManagerID = getemp.Data.ManagerID
+                    },
+                    Report = new ReportVM
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName
+                    }
+                };
+                taskReportEmp.Add(tasklistemployee);
+            }
+            else
+            {
+                var tasklistemployee = new TaskReportEmployeeVM
+                {
+                    Guid = j.Guid,
+                    Subject = j.Subject,
+                    Description = j.Description,
+                    Deadline = j.Deadline,
+                    EmployeeGuid = j.EmployeeGuid,
+                    CreatedDate = j.CreatedDate,
+                    ModifiedDate = j.ModifiedDate,
+                    Employee = new EmployeeVM
+                    {
+                        Guid = getemp.Data.Guid,
+                        NIK = getemp.Data.NIK,
+                        Fullname = getemp.Data.Fullname,
+                        Gender = getemp.Data.Gender,
+                        Email = getemp.Data.Email,
+                        PhoneNumber = getemp.Data.PhoneNumber,
+                        HiringDate = getemp.Data.HiringDate,
+                        CreatedDate = getemp.Data.CreatedDate,
+                        ModifiedDate = getemp.Data.ModifiedDate,
+                        ManagerID = getemp.Data.ManagerID
+                    },
+                };
+                taskReportEmp.Add(tasklistemployee);
+            }
 
+        }
+        /*foreach (var report in taskList)
+        {
+            var getReport = await reprepository.GetReportByTaskId(report.Guid);
+            getReport ??= null;
+        }*/
+        return View(taskReportEmp);
+    }
 
     public async Task<IActionResult> Creates()
     {
@@ -72,6 +173,26 @@ public class ReportController : Controller
 
         }
         return View(report);
+    }
+
+    public async Task<IActionResult> Download()
+    {
+        return View();
+    }
+
+
+
+
+
+    [HttpPost]
+    public async Task<IActionResult> DownloadFile(Guid reportId)
+    {
+        var result = await reprepository.DownloadReport(reportId);
+        if (result == "OK")
+        {
+            return RedirectToAction(nameof(IndexManager));
+        }
+        return RedirectToAction(nameof(IndexManager));
     }
 
     [HttpPost]

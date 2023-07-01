@@ -29,7 +29,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpPost("PostSingleFile")]
-    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
+    /*[Authorize(Roles = $"{nameof(RoleLevel.employee)}")]*/
     public async Task<IActionResult> PostSingleFile([FromForm] FileUploadAndDownlodVM reportvm)
     {
         if (reportvm is null)
@@ -48,7 +48,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpPut("UpdateSingleReport")]
-    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
+    /*[Authorize(Roles = $"{nameof(RoleLevel.employee)}")]*/
     public async Task<IActionResult> UpdateSingleReport([FromForm] FileUploadAndDownlodVM reportvm)
     {
         if (reportvm is null)
@@ -68,7 +68,7 @@ public class ReportController : BaseController<Report, ReportVM>
     }
 
     [HttpGet("DownloadFile")]
-    [Authorize(Roles = $"{nameof(RoleLevel.employee)}")]
+    /*[Authorize(Roles = $"{nameof(RoleLevel.employee)}")]*/
     public async Task<IActionResult> DownloadFile(Guid guid)
     {
         if (guid == null)
@@ -105,8 +105,8 @@ public class ReportController : BaseController<Report, ReportVM>
             var reportVM = new ReportVM
             {
                 Guid = taskId,
-                SubjectReport = report.Subject,
-                DescriptionReport = report.Description,
+                Subject = report.Subject,
+                Description = report.Description,
                 FileName = report.FileName,
                 FileData = report.FileData,
                 FileType = report.FileType,
@@ -147,8 +147,8 @@ public class ReportController : BaseController<Report, ReportVM>
             var reportVM = reports.Select(r => new ReportVM
             {
                 Guid = r.Guid,
-                SubjectReport = r.SubjectReport,
-                DescriptionReport = r.DescriptionReport,
+                Subject = r.Subject,
+                Description = r.Description,
                 FileName = r.FileName,
                 FileData = r.FileData,
                 FileType = r.FileType,

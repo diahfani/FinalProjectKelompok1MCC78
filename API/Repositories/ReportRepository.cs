@@ -77,8 +77,8 @@ public class ReportRepository : GeneralRepository<Report>, IReportRepository
                                       .Select(r => new ReportVM
         {
             Guid = r.Guid,
-            SubjectReport = r.Subject,
-            DescriptionReport = r.Description,
+            Subject = r.Subject,
+            Description = r.Description,
             FileName = r.FileName,
             FileData = r.FileData,
             FileType = r.FileType,

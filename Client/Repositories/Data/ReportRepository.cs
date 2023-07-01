@@ -18,6 +18,20 @@ public class ReportRepository : GeneralRepository<Report, Guid>, IReportReposito
         this.request = request;
     }
 
+    public async Task<string> DownloadReport(Guid ReportId)
+    {
+        /*ResponseViewModel<FileUploadAndDownlodVM> entityVM = null;*/
+        var responseString = "";
+        using (var response = httpClient.GetAsync($"{request}DownloadFile?guid={ReportId}").Result)
+        {
+            /*string apiResponse = await response.Content.ReadAsStringAsync();*/
+            string apiResponse =  response.StatusCode.ToString();
+            responseString = apiResponse;
+            /*entityVM = JsonConvert.DeserializeObject<ResponseViewModel<FileUploadAndDownlodVM>>(apiResponse);*/
+        }
+        return responseString;
+    }
+
     public async Task<ResponseListVM<Report>> GetReport()
     {
         ResponseListVM<Report> entityVM = null;
@@ -25,6 +39,17 @@ public class ReportRepository : GeneralRepository<Report, Guid>, IReportReposito
         {
             string apiResponse = await response.Content.ReadAsStringAsync();
             entityVM = JsonConvert.DeserializeObject<ResponseListVM<Report>>(apiResponse);
+        }
+        return entityVM;
+    }
+
+    public async Task<ResponseViewModel<ReportVM>> GetReportByTaskId(Guid TaskId)
+    {
+        ResponseViewModel<ReportVM> entityVM = null;
+        using (var response = httpClient.GetAsync($"{request}GetReportByTaskId?taskId={TaskId}").Result)
+        {
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            entityVM = JsonConvert.DeserializeObject<ResponseViewModel<ReportVM>>(apiResponse);
         }
         return entityVM;
     }
