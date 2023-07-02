@@ -24,16 +24,23 @@ public class TaskController : Controller
 
     public async Task<IActionResult> Index()
     {
+        // ambil id manager
         var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        // ambil employee yang manager id nya sma kayak id manager
         var results = await emprepository.GetEmployeeByManagerID(managerID);
+        // buat list employee id
         var employeeId = new List<Guid>();
+        // buat list task
         var taskList = new List<Task>();
+        // buat list task employee
         var taskEmp = new ViewModels.ResponseListVM<Models.Task>();
         var taskListEmp = new List<TaskEmployeeVM>();
+        // masukin employee id ke list employee id
         foreach (var i in results.Data)
         {
             employeeId.Add(i.Guid);
         }
+        // masukin task ke list task
         foreach(var gettask in employeeId)
         {
             taskEmp = await tasrepository.GetTaskByEmployeeId(gettask);
@@ -42,6 +49,7 @@ public class TaskController : Controller
                 taskList.Add(task);
             }
         }
+        // masukin task ke list task employee
         foreach(var j in taskList)
         {
             var getemp = await emprepository.Get(j.EmployeeGuid);
@@ -90,6 +98,17 @@ public class TaskController : Controller
         return View(tasks);*/
     }
 
+    public async Task<IActionResult> IndexEmployee()
+    {
+        var employeeID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await tasrepository.GetTaskByEmployeeId(employeeID);
+        var tasks = new List<Task>();
+        foreach (var task in result.Data)
+        {
+            tasks.Add(task);
+        }
+        return View(tasks);
+    }
 
    /* [HttpGet]
     [Authorize(Roles = "manager")]*/

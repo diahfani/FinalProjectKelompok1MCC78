@@ -71,7 +71,7 @@ namespace Client.Repositories
                 string apiResponse = await response.Content.ReadAsStringAsync();
                 entityVM = JsonConvert.DeserializeObject<ResponseMessageVM>(apiResponse);
             }
-            return entityVM;
+           return entityVM;
         }
 
         public async Task<ResponseListVM<Entity>> Get()

@@ -3,7 +3,9 @@ using Client.Repositories.Interface;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Versioning;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using File = Client.Models.File;
 
@@ -143,16 +145,101 @@ public class ReportController : Controller
         return View(taskReportEmp);
     }
 
+    public async Task<IActionResult> IndexEmployee()
+    {
+        var employeeID = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var getTask = await tasrepository.GetTaskByEmployeeId(employeeID);
+        var taskList = new List<Models.Task>();
+        foreach (var task in getTask.Data)
+        {
+            taskList.Add(task);
+        }
+        var taskReport = new List<TaskReportVM>();
+        foreach(var task in taskList)
+        {
+            var getReport = await reprepository.Get(task.Guid);
+            if (getReport.Data != null)
+            {
+                var taskreport = new TaskReportVM
+                {
+                    Task = new Models.Task
+                    {
+                        Guid = task.Guid,
+                        Subject = task.Subject,
+                        Description = task.Description,
+                        Deadline = task.Deadline,
+                        EmployeeGuid = task.EmployeeGuid,
+                        CreatedDate = task.CreatedDate,
+                        ModifiedDate = task.ModifiedDate,
+                    },
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        FileType = getReport.Data.FileType,
+                    }
+                };
+                taskReport.Add(taskreport);
+            }
+            else
+            {
+                var taskreport = new TaskReportVM
+                {
+                    Task = new Models.Task
+                    {
+                        Guid = task.Guid,
+                        Subject = task.Subject,
+                        Description = task.Description,
+                        Deadline = task.Deadline,
+                        EmployeeGuid = task.EmployeeGuid,
+                        CreatedDate = task.CreatedDate,
+                        ModifiedDate = task.ModifiedDate,
+                    },
+                    
+                };
+                taskReport.Add(taskreport);
+            }
+        }
+        /*var result = await tasrepository.GetTaskByEmployeeId(employeeID);
+        var reports = new List<Report>();
+        foreach (var report in result.Data)
+        {
+            reports.Add(report);
+        }*/
+        return View(taskReport);
+    }
+
     public async Task<IActionResult> Creates()
     {
+        Guid taskId = Guid.Parse(Request.Query["Guid"]);
+        ViewData["TaskId"] = taskId;
+        /*var getTaskId = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        ViewData["TaskId"] = getTaskId;*/
         return View();
     }
 
     [HttpPost]
     public async Task<IActionResult> Creates(File file)
     {
-        var result = await reprepository.Post(file);
-        if (result.StatusCode == 200)
+        var fileDetails = new Report
+        {
+            Guid = file.Guid,
+            Subject = file.Subject,
+            Description = file.Description,
+            FileName = file.FileName.FileName,
+            FileType = file.FileType,
+            /*CreatedDate = DateTime.Now,
+            ModifiedDate   = DateTime.Now,*/
+        };
+        using (var stream = new MemoryStream())
+        {
+            file.FileName.CopyTo(stream);
+            fileDetails.FileData = stream.ToArray();
+        }
+        var result = await reprepository.Post(fileDetails);
+        if (result.Message == "Create Success")
         {
             return RedirectToAction("/Report/Creates");
         }

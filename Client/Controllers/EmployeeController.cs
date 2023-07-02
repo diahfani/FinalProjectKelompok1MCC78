@@ -43,7 +43,7 @@ public class EmployeeController : Controller
     }
 
     [HttpGet]
-    /*[Authorize(Roles = "manager")]*/
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Manager()
     {
         /*var managerGUID = Guid.Parse(User.Claims.)*/
@@ -73,6 +73,36 @@ public class EmployeeController : Controller
     {
         return View();
     }*/
+
+    [HttpGet]
+    [Authorize(Roles = "employee")]
+    public async Task<IActionResult> Employee()
+    {
+        /*var managerGUID = Guid.Parse(User.Claims.)*/
+        var employeeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var result = await emprepository.Get(employeeId);
+        /*var employeeManager = new List<Employee>();*/
+
+        if (result.Data != null)
+        {
+            var employeeDetails =  new Employee
+            {
+                Guid = result.Data.Guid,
+                NIK = result.Data.NIK,
+                Fullname = result.Data.Fullname,
+                Gender = result.Data.Gender,
+                Email = result.Data.Email,
+                PhoneNumber = result.Data.PhoneNumber,
+                HiringDate = result.Data.HiringDate,
+                CreatedDate = result.Data.CreatedDate,
+                ModifiedDate = result.Data.ModifiedDate,
+                ManagerID = result.Data.ManagerID
+            };
+            return View(employeeDetails);
+        }
+        return View();
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> Creates(Employee employee)

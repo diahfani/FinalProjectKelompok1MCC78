@@ -1,13 +1,11 @@
-﻿@model IEnumerable<Client.Models.Employee>
+﻿@model IEnumerable<Client.Models.Task>
 
 @{
-    ViewData["Title"] = "Manager";
+    ViewData["Title"] = "IndexEmployee";
     Layout = null;
     string fullname = User.Identity.Name;
 }
 
-
-<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -25,9 +23,9 @@
 
         <div class="iq-sidebar  sidebar-default ">
             <div class="iq-sidebar-logo d-flex align-items-center">
-                <a asp-controller="Employee" asp-action="Manager" class="header-logo">
+                <a asp-controller="Employee" asp-action="Employee" class="header-logo">
                     <img src="~/assets/images/logo.svg" alt="logo">
-                    <h3 class="logo-title light-logo">Manager</h3>
+                    <h3 class="logo-title light-logo">Employee</h3>
                 </a>
                 <div class="iq-menu-bt-sidebar ml-0">
                     <i class="las la-bars wrapper-menu"></i>
@@ -36,8 +34,8 @@
             <div class="data-scrollbar" data-scroll="1">
                 <nav class="iq-sidebar-menu">
                     <ul id="iq-sidebar-toggle" class="iq-menu">
-                        <li class="active">
-                            <a asp-controller="Employee" asp-action="Manager" class="svg-icon">
+                        <li class="">
+                            <a asp-controller="Employee" asp-action="Employee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -45,8 +43,8 @@
                                 <span class="ml-4">Dashboard</span>
                             </a>
                         </li>
-                        <li class="">
-                            <a asp-controller="Task" asp-action="Index" class="svg-icon">
+                        <li class="Active">
+                            <a asp-controller="Task" asp-action="IndexEmployee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
                                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
@@ -56,13 +54,24 @@
                         </li>
 
                         <li class="">
-                            <a asp-controller="Report" asp-action="IndexManager" class="svg-icon">
+                            <a asp-controller="Report" asp-action="" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                 </svg>
-                                <span class="ml-4">Status</span>
+                                <span class="ml-4">History Report</span>
+                            </a>
+                        </li>
+
+                        <li class="">
+                            <a asp-controller="Rating" asp-action="" class="svg-icon">
+                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                                <span class="ml-4">Feedback Report</span>
                             </a>
                         </li>
 
@@ -115,114 +124,63 @@
         <div class="content-page">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card card-block card-stretch card-height">
-                            <div class="card-body">
-                                <div class="top-block d-flex align-items-center justify-content-between">
-                                    <h5>Investment</h5>
-                                    <span class="badge badge-primary">Monthly</span>
-                                </div>
-                                <h3>$<span class="counter">35000</span></h3>
-                                <div class="d-flex align-items-center justify-content-between mt-1">
-                                    <p class="mb-0">Total Revenue</p>
-                                    <span class="text-primary">65%</span>
-                                </div>
-                                <div class="iq-progress-bar bg-primary-light mt-2">
-                                    <span class="bg-primary iq-progress progress-1" data-percent="65"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-lg-12">
                         <div class="card">
-                            <div class="card-header d-flex justify-content-between">
-                                <div class="header-title">
-                                    <h4 class="card-title">Employee List</h4>
-                                </div>
-                            </div>
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <div class="row justify-content-between">
-                                        <div class="col-sm-6 col-md-6">
-                                            <div id="user_list_datatable_info" class="dataTables_filter">
-                                                <form class="mr-3 position-relative">
-                                                    <div class="form-group mb-0">
-                                                        <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search"
-                                                               aria-controls="user-list-table">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="user-list-files d-flex">
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Print
-                                                </a>
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Excel
-                                                </a>
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Pdf
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid"
-                                           aria-describedby="user-list-page-info">
-                                        <thead>
-                                            <tr class="ligth">
-                                                <th>NIK</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Contact</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var item in Model)
-                                            {
-                                                
-                                            <tr>
-                                                <td>@Html.DisplayFor(modelItem => item.NIK)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Fullname)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-                                             </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="row justify-content-between mt-3">
-                                    <div id="user-list-page-info" class="col-md-6">
-                                        <span>Showing 1 to 5 of 5 entries</span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination justify-content-end mb-0">
-                                                <li class="page-item disabled">
-                                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                                                </li>
-                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="#">Next</a>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+                                    <h5>List Task</h5>
+                                    @*<div class="d-flex flex-wrap align-items-center">
+                                        <a href="@Url.Action("Creates", "Task")" class="btn btn-primary">New Task</a>
+                                    </div>*@
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-lg-12">
+                                        @foreach (var item in Model)
+                                        {
+                                            <div class="card card-widget task-card">
+                                                <div class="card-body">
+                                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                                        <div class="d-flex align-items-center">
+                                                            <div>
+                                                                <h5 class="mb-2"> @Html.DisplayFor(modelItem => item.Subject)</h5>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex align-items-center list-user-action">
+                                                            <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
+                                                               data-original-title="Edit" href="@Url.Action("Creates", "Report", new { item.Guid/* id=item.PrimaryKey */ })">
+                                                                Add Report
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
                 </div>
+
                 <!-- Page end  -->
             </div>
         </div>
     </div>
     <!-- Wrapper End-->
-    
     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
 
@@ -236,9 +194,10 @@
 </body>
 </html>
 
-@*<h1>Manager</h1>*@
 
-@*<p>
+@*<h1>IndexEmployee</h1>
+
+<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -248,31 +207,22 @@
                 @Html.DisplayNameFor(model => model.Guid)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NIK)
+                @Html.DisplayNameFor(model => model.Subject)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fullname)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Gender)
+                @Html.DisplayNameFor(model => model.Deadline)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HiringDate)
+                @Html.DisplayNameFor(model => model.EmployeeGuid)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ManagerID)
             </th>
             <th></th>
         </tr>
@@ -284,31 +234,22 @@
                 @Html.DisplayFor(modelItem => item.Guid)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.NIK)
+                @Html.DisplayFor(modelItem => item.Subject)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Fullname)
+                @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Gender)
+                @Html.DisplayFor(modelItem => item.Deadline)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.HiringDate)
+                @Html.DisplayFor(modelItem => item.EmployeeGuid)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CreatedDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ModifiedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManagerID)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

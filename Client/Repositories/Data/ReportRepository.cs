@@ -59,7 +59,7 @@ public class ReportRepository : GeneralRepository<Report, Guid>, IReportReposito
     {
         ResponseViewModel<Models.File> entityVM = null;
         StringContent content = new StringContent(JsonConvert.SerializeObject(file), Encoding.UTF8, "application/json");
-        using (var response = httpClient.PostAsync(request + "UploadReport", content).Result)
+        using (var response = httpClient.PostAsync(request + "PostSingleFile", content).Result)
         {
             string apiResponse = await response.Content.ReadAsStringAsync();
             entityVM = JsonConvert.DeserializeObject<ResponseViewModel<Models.File>>(apiResponse);

@@ -44,11 +44,11 @@ namespace Client.Controllers
                 var role = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Role);
                 if (role == "manager")
                 {
-                    return RedirectToAction("Manager", "Account");
+                    return RedirectToAction("Manager", "Employee");
                 }
                 else if (role == "employee")
                 {
-                    return RedirectToAction("Employee", "Home");
+                    return RedirectToAction("Employee", "Employee");
                 }
             }
             var result = await repository.Logins(login);
@@ -87,7 +87,7 @@ namespace Client.Controllers
                 }
                 else if (getRole == "employee")
                 {
-                    return RedirectToAction("Employee", "Home");
+                    return RedirectToAction("Employee", "Employee");
                 }
             }
             return View();

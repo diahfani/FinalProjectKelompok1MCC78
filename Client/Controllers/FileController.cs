@@ -24,9 +24,9 @@ public class FileController : Controller
             files = result.Data.Select(e => new File
             {
                 Guid = e.Guid,
-                Name = e.Name,
+                /*Name = e.Name,
                 Data = e.Data,
-                Type = e.Type
+                Type = e.Type*/
 
             }).ToList();
         }
@@ -68,9 +68,9 @@ public class FileController : Controller
         else
         {
             file.Guid = result.Data.Guid;
-            file.Name = result.Data.Name;
+            /*file.Name = result.Data.Name;
             file.Data = result.Data.Data;
-            file.Type = result.Data.Type;
+            file.Type = result.Data.Type;*/
 
 
         }
@@ -119,9 +119,9 @@ public class FileController : Controller
         else
         {
             file.Guid = result.Data.Guid;
-            file.Name = result.Data.Name;
+           /* file.Name = result.Data.Name;
             file.Data = result.Data.Data;
-            file.Type = result.Data.Type;
+            file.Type = result.Data.Type;*/
         }
 
         return View(file);
