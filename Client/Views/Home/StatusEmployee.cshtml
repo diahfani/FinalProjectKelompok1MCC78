@@ -1,53 +1,41 @@
-﻿@{
+﻿@model IEnumerable<Client.Models.Rating>
+
+@{
     Layout = null;
 }
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
-
-
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>StatusManager</title>
-      
-      
-      <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
+    <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
       <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
       <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
-      
-      <style>
-        /* Custom styles for the rating modal */
-        .rating-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            justify-content: center;
+    <style>
+        .rating-stars {
+            color: rgb(219, 219, 219);
         }
-        .rating-container .star {
-            font-size: 50px;
-            color: #ccc;
-            cursor: pointer;
+
+        .rating-stars .fa-star {
+            font-size: 20px;
         }
-        .rating-container .star.checked {
-            color: #f8b739;
+
+        .rating-stars .fa-star.checked {
+            color: gold;
         }
-        .rating-container .star:hover,
-        .rating-container .star.checked:hover {
-            color: #f8b739;
-        }
-        .rating-container .star:last-child {
-            margin-right: 0;
-        }
-        .modal-body .custom-textbox{
-            width: 470px;
-            height: 400px;
+
+        .custom-textbox {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
         }
     </style>
-
-  </head>
-  <body class="  ">
+</head>
+<body>
     <!-- Wrapper Start -->
     <div class="wrapper">
       
@@ -146,6 +134,7 @@
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
                     <tbody>
+                        
                         <tr>
                             <td>Karyawan 1</td>
                             <td>
@@ -155,7 +144,11 @@
                                 <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
                             </td>
                             <td>
-                               <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light">Rating</a>
+                                
+                                @foreach (var item in Model)
+            {
+                               <a data-toggle="modal" data-target="#ratingModal_@item.Guid" class="btn bg-info-light">Rating</a>
+            }
                             </td>
                             <td>
                                
@@ -264,78 +257,120 @@
     </div>
       </div>
     </div>
-    <!-- Wrapper End-->
 
-    <!-- Modal list start --> 
-    <!-- Rating Modal -->
-    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ratingModalLabel">Rate and Comment</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+     @foreach (var item in Model)
+            {
+                <!-- Modal -->
+<div class="modal fade" id="ratingModal_@item.Guid" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel_@item.Guid" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ratingModalLabel_@item.Guid">Rating</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                     <input type="hidden" name="guid" value="@item.Guid" />
+                    <input type="hidden" name="ratingValue" value="@item.RatingValue" />
+
+                <div class="rating-stars" id="ratingStars_@item.Guid" value="@item.RatingValue">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= item.RatingValue)
+                        {
+                            <span class="fa fa-star checked" onclick="updateRating('@item.Guid', @i)"></span>
+                        }
+                        else
+                        {
+                            <span class="fa fa-star" onclick="updateRating('@item.Guid', @i)"></span>
+                        }
+                    }
                 </div>
-                <div class="modal-body">
-                    <div class="rating-container">
-                        <span class="star" onclick="rate(1)">&#9734;</span>
-                        <span class="star" onclick="rate(2)">&#9734;</span>
-                        <span class="star" onclick="rate(3)">&#9734;</span>
-                        <span class="star" onclick="rate(4)">&#9734;</span>
-                        <span class="star" onclick="rate(5)">&#9734;</span>
+                
+                   
+
+                    <textarea class="custom-textbox" name="comment">@item.Comment</textarea>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
                     </div>
-                    <textarea class="custom-textbox"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-    
+</div>
+
+            }
+
 
     <script>
-        let selectedRating = 0;
+        $(document).ready(function () {
+            $('.modal').on('shown.bs.modal', function () {
+                var modalId = $(this).attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = $('#ratingValue_' + ratingId).val();
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).data('rating-value') <= ratingValue) {
+                        $(this).addClass('checked');
+                    } else {
+                        $(this).removeClass('checked');
+                    }
+                });
+            });
 
-        function rate(rating) {
-            selectedRating = rating;
+            $('.modal form').submit(function (event) {
+                event.preventDefault(); // Prevent form submission
 
-            // Reset all stars to default state
-            const stars = document.getElementsByClassName('star');
-            for (let i = 0; i < stars.length; i++) {
-                stars[i].innerHTML = '&#9734;';
-                stars[i].classList.remove('checked');
+                var modalId = $(this).closest('.modal').attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = 0;
+
+                // Determine the selected rating value
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).hasClass('checked')) {
+                        ratingValue = $(this).data('rating-value');
+                    }
+                });
+
+                // Get the comment value
+                var comment = $('#comment_' + ratingId).val();
+
+                // Set the values in the hidden input fields
+                $('#ratingValue_' + ratingId).val(ratingValue);
+
+                // Submit the form
+                $(this).off('submit').submit();
+            });
+        });
+
+        function updateRating(guid, rating) {
+        var ratingStars = $('#ratingStars_' + guid + ' span');
+        ratingStars.each(function (index) {
+            if (index < rating) {
+                $(this).addClass('checked');
+            } else {
+                $(this).removeClass('checked');
             }
+        });
 
-            // Fill selected stars
-            for (let i = 0; i < rating; i++) {
-                stars[i].innerHTML = '&#9733;';
-                stars[i].classList.add('checked');
-            }
-        }
-
-        function submitRating() {
-            const comment = document.getElementById('comment').value;
-
-            // Perform rating submission logic here
-            // You can send the selectedRating and comment to the server for further processing
-
-            // Example alert to show the selected rating and comment
-            alert('Rating: ' + selectedRating + '\nComment: ' + comment);
-
-            // Close the modal
-            $('#ratingModal').modal('hide');
-        }
+        // Mengatur nilai rating pada atribut data-rating-value
+        $('#ratingStars_' + guid).data('rating-value', rating);
+    }
     </script>
-    
-    <!-- Backend Bundle JavaScript -->
+
+
+     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
     
     <!-- Chart Custom JavaScript -->
     <script async src="~/assets/js/chart-custom.js"></script>
     <script src="~/assets/js/app.js"></script>
-    
-    
-  </body>
+
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
 </html>

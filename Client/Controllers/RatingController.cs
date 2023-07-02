@@ -45,7 +45,7 @@ public class RatingController : Controller
         var result = await ratrepository.Post(rating);
         if (result.StatusCode == 200)
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("StatusManager", "Home");
         }
         else if (result.StatusCode == 409)
         {
@@ -53,7 +53,7 @@ public class RatingController : Controller
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction("StatusManager", "Home");
     }
 
     public async Task<IActionResult> Deletes(Guid guid)
