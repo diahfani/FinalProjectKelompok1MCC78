@@ -271,7 +271,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form asp-action="Edit" method="post">
+                <form asp-action="Index" method="get">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                      <input type="hidden" name="guid" value="@item.Guid" />
                     <input type="hidden" name="ratingValue" value="@item.RatingValue" />
@@ -374,3 +374,67 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
+
+
+
+
+@*@model IEnumerable<Client.Models.Rating>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Guid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RatingValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Guid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RatingValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { item.Guid }) |
+                @Html.ActionLink("Details", "Details", new { item.Guid }) |
+                @Html.ActionLink("Delete", "Delete", new { item.Guid })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+*@
