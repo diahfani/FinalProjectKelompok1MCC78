@@ -37,12 +37,12 @@ namespace Client.Controllers
         {
             return View();
         }
-        /*[Authorize(Roles = "manager")]*/
+        [Authorize(Roles = "manager")]
         public IActionResult Manager()
         {
             return View("Views/Home/Manager.cshtml");
         }
-        /*[Authorize(Roles = "employee")]*/
+        [Authorize(Roles = "employee")]
         public IActionResult Employee()
         {
             return View("Views/Home/Employee.cshtml");
@@ -62,6 +62,26 @@ namespace Client.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [AllowAnonymous]
+        [HttpGet("/Unauthorized")]
+        public IActionResult Unauthorized()
+        {
+            return View("401");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/Forbidden")]
+        public IActionResult Forbidden()
+        {
+            return View("403");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("/NotFound")]
+        public IActionResult NotFound()
+        {
+            return View("404");
         }
     }
 }
