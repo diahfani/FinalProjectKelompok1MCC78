@@ -13,7 +13,7 @@ public class RatingController : Controller
         this.ratrepository = _ratrepository;
     }
 
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> StatusEmployee()
     {
         var result = await ratrepository.Get();
         var ratings = new List<Rating>();
