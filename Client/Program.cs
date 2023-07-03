@@ -67,9 +67,9 @@ app.UseRouting();
     }
     if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
     {
-        response.Redirect("/Forbidden");
+        response.Redirect("/forbidden");
     }
-});*/
+});
 
 app.UseSession();
 app.Use(async (context, next) =>
