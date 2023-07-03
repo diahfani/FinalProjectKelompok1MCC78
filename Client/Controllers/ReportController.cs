@@ -243,7 +243,7 @@ public class ReportController : Controller
         {
             return RedirectToAction(nameof(IndexEmployee));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
@@ -317,11 +317,11 @@ public class ReportController : Controller
             fileDetails.FileData = stream.ToArray();
         }
         var result = await reprepository.Put(fileDetails);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

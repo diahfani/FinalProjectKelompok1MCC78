@@ -19,5 +19,29 @@ namespace API.Controllers
             _accountRoleRepository = accountRoleRepository;
             _mapper = mapper;
         }
+
+        [HttpGet("GetRoleManager")]
+        public IActionResult GetRoleManager()
+        {
+            var query = _accountRoleRepository.GetRoleManager();
+            if (query == null)
+            {
+                return BadRequest(new ResponseVM<RoleManagerVM>
+                {
+                    Code = StatusCodes.Status400BadRequest,
+                    Status = HttpStatusCode.BadRequest.ToString(),
+                    Message = "Get Role Manager failed",
+                    Data = null
+                });
+            }
+            return Ok(new ResponseVM<IEnumerable<RoleManagerVM>>
+            {
+                Code = StatusCodes.Status200OK,
+                Status = HttpStatusCode.OK.ToString(),
+                Message = "Get Role Manager successfully",
+                Data = query
+            });
+        }
+
     }
 }

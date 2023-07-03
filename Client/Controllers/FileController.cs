@@ -44,11 +44,11 @@ public class FileController : Controller
     public async Task<IActionResult> Creates(File file)
     {
         var result = await filerepository.Post(file);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
@@ -81,7 +81,7 @@ public class FileController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await filerepository.Deletes(guid);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -94,11 +94,11 @@ public class FileController : Controller
 
 
         var result = await filerepository.Put(file);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

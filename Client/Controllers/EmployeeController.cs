@@ -108,11 +108,11 @@ public class EmployeeController : Controller
     public async Task<IActionResult> Creates(Employee employee)
     {
         var result = await emprepository.Post(employee);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
@@ -149,7 +149,7 @@ public class EmployeeController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await emprepository.Deletes(guid);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -162,11 +162,11 @@ public class EmployeeController : Controller
 
 
         var result = await emprepository.Put(employee);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

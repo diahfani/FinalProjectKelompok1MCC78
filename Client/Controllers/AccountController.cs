@@ -10,11 +10,13 @@ namespace Client.Controllers
     {
         private readonly IAccountRepository repository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAccountRoleRepository _accountRoleRepository;
 
-        public AccountController(IAccountRepository repository, IHttpContextAccessor httpContextAccessor)
+        public AccountController(IAccountRepository repository, IHttpContextAccessor httpContextAccessor, IAccountRoleRepository accountRoleRepository)
         {
             this.repository = repository;
             _httpContextAccessor = httpContextAccessor;
+            _accountRoleRepository = accountRoleRepository;
         }
 
         [HttpGet]
@@ -110,8 +112,10 @@ namespace Client.Controllers
         }
 
         [HttpGet]
-        public IActionResult Registers()
+        public async Task<IActionResult> Registers()
         {
+            var getRoleManager = await _accountRoleRepository.GetRoleManager();
+            ViewBag.RoleManager = getRoleManager.Data;
             return View();
         }
 
@@ -125,18 +129,18 @@ namespace Client.Controllers
             {
                 return RedirectToAction("Error", "Home");
             }
-            else if (result.StatusCode == 409)
+            else if (result.Code == 409)
             {
                 ModelState.AddModelError(string.Empty, result.Message);
                 TempData["Error"] = $"Something Went Wrong! - {result.Message}!";
                 return View();
             }
-            else if (result.StatusCode == 200)
+            else if (result.Code == 200)
             {
                 TempData["Success"] = $"Data has been Successfully Registered! - {result.Message}!";
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Logins", "Account");
             }
-            return RedirectToAction("Index", "Employee");
+            return RedirectToAction("LandingPage", "Home");
         }
     }
 }

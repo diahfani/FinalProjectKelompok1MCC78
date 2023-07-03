@@ -58,8 +58,12 @@
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input asp-for="Gender" class="floating-input form-control" type="text" placeholder=" " />
-                                             <span asp-validation-for="Gender" class="text-danger"></span>
+                                              <select asp-for="Gender" class="selectpicker floating-input form-control">
+                                                  <option value="0">Female</option>
+                                                  <option value="1">Male</option>
+                                              </select>
+@*                                             <input asp-for="Gender" class="floating-input form-control" type="text" placeholder=" " />
+*@                                             <span asp-validation-for="Gender" class="text-danger"></span>
                                              <label asp-for="Gender">Gender</label>
                                           </div>
                                        </div>
@@ -79,9 +83,15 @@
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="floating-label form-group">
-                                             <input asp-for="ManagerID" class="floating-input form-control" type="text" placeholder=" " />
-                                             <span asp-validation-for="ManagerID" class="text-danger"></span>
-                                             <label asp-for="ManagerID">ManagerID</label>
+                                              <select asp-for="ManagerID" class="selectpicker floating-input form-control">
+                                                                @foreach (var item in ViewBag.RoleManager)
+                                                                {
+                                                                    <option asp-for="ManagerID" value="@item.AccountGuid">@item.ManagerName </option>
+                                                                }
+                                                            </select>
+@*                                             <input asp-for="ManagerID" class="floating-input form-control" type="text" placeholder=" " />
+*@                                             <span asp-validation-for="ManagerID" class="text-danger"></span>
+                                             <label asp-for="ManagerID">Manager</label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">

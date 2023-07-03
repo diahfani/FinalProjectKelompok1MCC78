@@ -195,11 +195,11 @@ public class TaskController : Controller
     public async Task<IActionResult> Creates(Task task)
     {
         var result = await tasrepository.Post(task);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return Redirect("/Task/Creates");
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

@@ -43,11 +43,11 @@ public class RatingController : Controller
     public async Task<IActionResult> Creates(Rating rating)
     {
         var result = await ratrepository.Post(rating);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction("StatusManager", "Home");
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
@@ -80,7 +80,7 @@ public class RatingController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await ratrepository.Deletes(guid);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -93,11 +93,11 @@ public class RatingController : Controller
 
 
         var result = await ratrepository.Put(rating);
-        if (result.StatusCode == 200)
+        if (result.Code == 200)
         {
             return RedirectToAction(nameof(Index));
         }
-        else if (result.StatusCode == 409)
+        else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

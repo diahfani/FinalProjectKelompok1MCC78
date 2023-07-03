@@ -18,6 +18,7 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -69,7 +70,7 @@ app.UseStatusCodePages(async context =>
     {
         response.Redirect("/Forbidden");
     }
-});*/
+});
 
 app.UseSession();
 app.Use(async (context, next) =>

@@ -19,6 +19,19 @@ namespace Client.Repositories.Data
             this.request = request;
         }
 
+        public async Task<ResponseListVM<RoleManagerVM>> GetRoleManager()
+        {
+            ResponseListVM<RoleManagerVM> responseListVM = null;
+            StringContent content = new StringContent(JsonConvert.SerializeObject(responseListVM), Encoding.UTF8, "application/json");
+            using (var response = httpClient.GetAsync("AccountRole/GetRoleManager").Result)
+            {
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                responseListVM = JsonConvert.DeserializeObject<ResponseListVM<RoleManagerVM>>(apiResponse);
+            }
+            return responseListVM;
+
+        }
+
         public async Task<ResponseViewModel<string>> Logins(LoginVM entity)
         {
             ResponseViewModel<string> entityVM = null;
