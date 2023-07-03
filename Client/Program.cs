@@ -53,7 +53,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // custom error page
-/*app.UseStatusCodePages(async context =>
+app.UseStatusCodePages(async context =>
 {
     var response = context.HttpContext.Response;
 
@@ -67,7 +67,7 @@ app.UseRouting();
     }
     if (response.StatusCode.Equals((int)HttpStatusCode.Forbidden))
     {
-        response.Redirect("/forbidden");
+        response.Redirect("/Forbidden");
     }
 });*/
 
