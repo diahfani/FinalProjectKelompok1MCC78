@@ -3,6 +3,7 @@ using Client.Repositories.Interface;
 using Client.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using Task = Client.Models.Task;
@@ -14,12 +15,14 @@ public class TaskController : Controller
     private readonly ITaskRepository tasrepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IEmployeeRepository emprepository;
+    private readonly IReportRepository reprepository;
 
-    public TaskController(ITaskRepository _tasrepository, IHttpContextAccessor httpContextAccessor, IEmployeeRepository emprepository)
+    public TaskController(ITaskRepository _tasrepository, IHttpContextAccessor httpContextAccessor, IEmployeeRepository emprepository, IReportRepository reprepository)
     {
         this.tasrepository = _tasrepository;
         _httpContextAccessor = httpContextAccessor;
         this.emprepository = emprepository;
+        this.reprepository = reprepository;
     }
 
     public async Task<IActionResult> Index()
@@ -107,7 +110,56 @@ public class TaskController : Controller
         {
             tasks.Add(task);
         }
-        return View(tasks);
+        var taskReport = new List<TaskReportVM>();
+        foreach (var task in tasks)
+        {
+            var getReport = await reprepository.Get(task.Guid);
+            if (getReport.Data != null)
+            {
+                var taskreport = new TaskReportVM
+                {
+                    Task = new Models.Task
+                    {
+                        Guid = task.Guid,
+                        Subject = task.Subject,
+                        Description = task.Description,
+                        Deadline = task.Deadline,
+                        EmployeeGuid = task.EmployeeGuid,
+                        CreatedDate = task.CreatedDate,
+                        ModifiedDate = task.ModifiedDate,
+                    },
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        FileType = getReport.Data.FileType,
+                    }
+                };
+                taskReport.Add(taskreport);
+            }
+            else
+            {
+                var taskreport = new TaskReportVM
+                {
+                    Task = new Models.Task
+                    {
+                        Guid = task.Guid,
+                        Subject = task.Subject,
+                        Description = task.Description,
+                        Deadline = task.Deadline,
+                        EmployeeGuid = task.EmployeeGuid,
+                        CreatedDate = task.CreatedDate,
+                        ModifiedDate = task.ModifiedDate,
+                    },
+
+                };
+                taskReport.Add(taskreport);
+            }
+        }
+
+        return View(taskReport);
     }
 
    /* [HttpGet]
@@ -192,12 +244,10 @@ public class TaskController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(Task task)
     {
-
-
         var result = await tasrepository.Put(task);
         if (result.Message == "Update success")
         {
-            return Redirect("/Task/Index");
+            return RedirectToAction(nameof(Index));
         }
         else if (result.Message != "Update success")
         {
@@ -205,7 +255,7 @@ public class TaskController : Controller
             return View();
         }
 
-        return Redirect("/Task/Index");
+        return RedirectToAction(nameof(Index));
     }
 
     [HttpGet]

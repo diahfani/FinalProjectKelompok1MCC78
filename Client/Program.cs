@@ -69,7 +69,7 @@ app.UseRouting();
     {
         response.Redirect("/forbidden");
     }
-});
+});*/
 
 app.UseSession();
 app.Use(async (context, next) =>

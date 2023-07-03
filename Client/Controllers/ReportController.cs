@@ -241,7 +241,7 @@ public class ReportController : Controller
         var result = await reprepository.Post(fileDetails);
         if (result.Message == "Create Success")
         {
-            return RedirectToAction("/Report/Creates");
+            return RedirectToAction(nameof(IndexEmployee));
         }
         else if (result.StatusCode == 409)
         {
@@ -249,9 +249,10 @@ public class ReportController : Controller
             return View();
         }
 
-        return RedirectToAction("/Report/Creates");
+        return RedirectToAction(nameof(IndexEmployee));
     }
 
+    [HttpGet]
     public async Task<IActionResult> Deletes(Guid guid)
     {
         var result = await reprepository.Get(guid);
@@ -265,8 +266,7 @@ public class ReportController : Controller
             report.Guid = result.Data.Guid;
             report.Subject = result.Data.Subject;
             report.Description = result.Data.Description;
-
-
+            report.FileName = result.Data.FileName;
         }
         return View(report);
     }
@@ -275,10 +275,6 @@ public class ReportController : Controller
     {
         return View();
     }
-
-
-
-
 
     [HttpPost]
     public async Task<IActionResult> DownloadFile(Guid reportId)
@@ -295,19 +291,32 @@ public class ReportController : Controller
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await reprepository.Deletes(guid);
-        if (result.StatusCode == 200)
+        if (result.Message == "Delete Success")
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexEmployee));
         }
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(IndexEmployee));
     }
 
     [HttpPost]
     public async Task<IActionResult> Edit(File file)
     {
-
-
-        var result = await reprepository.Put(file);
+        var fileDetails = new Report
+        {
+            Guid = file.Guid,
+            Subject = file.Subject,
+            Description = file.Description,
+            FileName = file.FileName.FileName,
+            FileType = file.FileType,
+            /*CreatedDate = DateTime.Now,
+            ModifiedDate   = DateTime.Now,*/
+        };
+        using (var stream = new MemoryStream())
+        {
+            file.FileName.CopyTo(stream);
+            fileDetails.FileData = stream.ToArray();
+        }
+        var result = await reprepository.Put(fileDetails);
         if (result.StatusCode == 200)
         {
             return RedirectToAction(nameof(Index));
@@ -325,7 +334,7 @@ public class ReportController : Controller
     public async Task<IActionResult> Edit(Guid guid)
     {
         var result = await reprepository.Get(guid);
-        var report = new Report();
+        var report = new File();
         if (result.Data?.Guid is null)
         {
             return View(report);
@@ -335,6 +344,8 @@ public class ReportController : Controller
             report.Guid = result.Data.Guid;
             report.Subject = result.Data.Subject;
             report.Description = result.Data.Description;
+            report.FileType = result.Data.FileType;
+
         }
 
         return View(report);
