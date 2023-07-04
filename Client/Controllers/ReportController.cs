@@ -1,6 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Versioning;
@@ -17,13 +18,15 @@ public class ReportController : Controller
     private readonly IHttpContextAccessor _httpContextAcessor;
     private readonly IEmployeeRepository emprepository;
     private readonly ITaskRepository tasrepository;
+    private readonly IRatingRepository _ratingRepository;
 
-    public ReportController(IReportRepository _reprepository, IHttpContextAccessor httpContextAcessor, IEmployeeRepository emprepository, ITaskRepository tasrepository)
+    public ReportController(IReportRepository _reprepository, IHttpContextAccessor httpContextAcessor, IEmployeeRepository emprepository, ITaskRepository tasrepository, IRatingRepository ratingRepository)
     {
         this.reprepository = _reprepository;
         _httpContextAcessor = httpContextAcessor;
         this.emprepository = emprepository;
         this.tasrepository = tasrepository;
+        _ratingRepository = ratingRepository;
     }
 
     public async Task<IActionResult> Index()
@@ -50,6 +53,8 @@ public class ReportController : Controller
         return View();
     }
 
+    [HttpGet]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> IndexManager()
     {
         var managerID = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -58,6 +63,7 @@ public class ReportController : Controller
         var taskList = new List<Models.Task>();
         var taskEmp = new ViewModels.ResponseListVM<Models.Task>();
         var taskReportEmp = new List<TaskReportEmployeeVM>();
+        var taskReportEmpRating = new List<TaskReportEmployeeRatingVM>();
         foreach (var i in results.Data)
         {
             employeeId.Add(i.Guid);
@@ -74,11 +80,11 @@ public class ReportController : Controller
         {
             var getemp = await emprepository.Get(j.EmployeeGuid);
             var getReport = await reprepository.GetReportByTaskId(j.Guid);
-            if (getReport.Data != null)
+            var getRating = await _ratingRepository.Get(j.Guid);
+            if (getReport.Data != null && getRating.Data != null)
             {
-                var tasklistemployee = new TaskReportEmployeeVM
+                var taskListEmployee = new TaskReportEmployeeRatingVM
                 {
-                    Guid = j.Guid,
                     Subject = j.Subject,
                     Description = j.Description,
                     Deadline = j.Deadline,
@@ -104,13 +110,53 @@ public class ReportController : Controller
                         Subject = getReport.Data.Subject,
                         Description = getReport.Data.Description,
                         FileName = getReport.Data.FileName
+                    },
+                    Rating = new Rating
+                    {
+                        Guid = getRating.Data.Guid,
+                        RatingValue = getRating.Data.RatingValue,
+                        Comment = getRating.Data.Comment,
+                        CreatedDate = getRating.Data.CreatedDate,
+                        ModifiedDate = getRating.Data.ModifiedDate
                     }
                 };
-                taskReportEmp.Add(tasklistemployee);
+                taskReportEmpRating.Add(taskListEmployee);
             }
-            else
+            else if (getReport.Data != null)
             {
-                var tasklistemployee = new TaskReportEmployeeVM
+                var taskListEmployee = new TaskReportEmployeeRatingVM
+                {
+                    Subject = j.Subject,
+                    Description = j.Description,
+                    Deadline = j.Deadline,
+                    EmployeeGuid = j.EmployeeGuid,
+                    CreatedDate = j.CreatedDate,
+                    ModifiedDate = j.ModifiedDate,
+                    Employee = new EmployeeVM
+                    {
+                        Guid = getemp.Data.Guid,
+                        NIK = getemp.Data.NIK,
+                        Fullname = getemp.Data.Fullname,
+                        Gender = getemp.Data.Gender,
+                        Email = getemp.Data.Email,
+                        PhoneNumber = getemp.Data.PhoneNumber,
+                        HiringDate = getemp.Data.HiringDate,
+                        CreatedDate = getemp.Data.CreatedDate,
+                        ModifiedDate = getemp.Data.ModifiedDate,
+                        ManagerID = getemp.Data.ManagerID
+                    },
+                    Report = new ReportVM
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName
+                    },
+                };
+                taskReportEmpRating.Add(taskListEmployee);
+            } else
+            {
+                var tasklistemployee = new TaskReportEmployeeRatingVM
                 {
                     Guid = j.Guid,
                     Subject = j.Subject,
@@ -133,7 +179,7 @@ public class ReportController : Controller
                         ManagerID = getemp.Data.ManagerID
                     },
                 };
-                taskReportEmp.Add(tasklistemployee);
+                taskReportEmpRating.Add(tasklistemployee);
             }
 
         }
@@ -142,9 +188,11 @@ public class ReportController : Controller
             var getReport = await reprepository.GetReportByTaskId(report.Guid);
             getReport ??= null;
         }*/
-        return View(taskReportEmp);
+        return View(taskReportEmpRating);
     }
 
+    [HttpGet]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> IndexEmployee()
     {
         var employeeID = Guid.Parse(_httpContextAcessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -211,6 +259,8 @@ public class ReportController : Controller
         return View(taskReport);
     }
 
+    [HttpGet]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Creates()
     {
         Guid taskId = Guid.Parse(Request.Query["Guid"]);
@@ -221,6 +271,7 @@ public class ReportController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Creates(File file)
     {
         var fileDetails = new Report
@@ -253,6 +304,7 @@ public class ReportController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Deletes(Guid guid)
     {
         var result = await reprepository.Get(guid);
@@ -288,6 +340,7 @@ public class ReportController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await reprepository.Deletes(guid);
@@ -299,6 +352,7 @@ public class ReportController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Edit(File file)
     {
         var fileDetails = new Report
@@ -331,6 +385,7 @@ public class ReportController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> Edit(Guid guid)
     {
         var result = await reprepository.Get(guid);

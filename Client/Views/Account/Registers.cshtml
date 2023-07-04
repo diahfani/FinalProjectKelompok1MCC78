@@ -86,7 +86,7 @@
                                               <select asp-for="ManagerID" class="selectpicker floating-input form-control">
                                                                 @foreach (var item in ViewBag.RoleManager)
                                                                 {
-                                                                    <option asp-for="ManagerID" value="@item.AccountGuid">@item.ManagerName </option>
+                                                                    <option asp-for="ManagerID" value="@item.AccountGuid">@item.ManagerName</option>
                                                                 }
                                                             </select>
 @*                                             <input asp-for="ManagerID" class="floating-input form-control" type="text" placeholder=" " />
