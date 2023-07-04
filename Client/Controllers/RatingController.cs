@@ -7,10 +7,47 @@ namespace Client.Controllers;
 public class RatingController : Controller
 {
     private readonly IRatingRepository ratrepository;
+    private readonly ITaskRepository taskrepository;
 
-    public RatingController(IRatingRepository _ratrepository)
+    public RatingController(IRatingRepository _ratrepository, ITaskRepository _taskrepository)
     {
         this.ratrepository = _ratrepository;
+        this.taskrepository = _taskrepository;
+    }
+
+    public async Task<IActionResult> PerformanceEmployee()
+    {
+        var result = await ratrepository.Get();
+        var result2 = await taskrepository.Get();
+        var viewModel = new TaskRatingViewModel();
+
+        if (result.Data != null)
+        {
+            viewModel.Ratings = result.Data.Select(e => new Rating
+            {
+                Guid = e.Guid,
+                RatingValue = e.RatingValue,
+                Comment = e.Comment,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate
+            }).ToList();
+        }
+        if (result2.Data != null)
+        {
+            viewModel.Tasks = result2.Data.Select(t => new Models.Task
+            {
+                Guid = t.Guid,
+                Subject = t.Subject,
+                Description = t.Description,
+                Deadline = t.Deadline,
+                EmployeeGuid = t.EmployeeGuid,
+                CreatedDate = t.CreatedDate,
+                ModifiedDate = t.ModifiedDate
+
+            }).ToList();
+        }
+
+        return View(viewModel);
     }
 
     public async Task<IActionResult> StatusEmployee()
