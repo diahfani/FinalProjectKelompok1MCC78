@@ -57,6 +57,11 @@ namespace Client.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "employee")]
+        public IActionResult PerformanceEmployee()
+        {
+            return View();
+        }
 
 [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
