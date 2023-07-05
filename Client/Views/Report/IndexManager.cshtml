@@ -13,6 +13,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Status Manager</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
 
     <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
     <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
@@ -148,6 +151,16 @@
                 <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
                     <div class="table-responsive rounded bg-white mb-4">
                         <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee</th>
+                                    <th scope="col">Subject Task</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Rating</th>
+                                    <th scope="col">Detail Report</th>
+                                </tr>
+                            </thead>
                             @foreach(var item in Model)
                             {
                                 <tbody>
@@ -156,37 +169,64 @@
                                         <td>
                                             @item.Subject
                                         </td>
-                                        @if(DateTime.Now > item.Deadline)
-                                        {
-                                            <td>
+                                        <td>
+                                            @if (DateTime.Now > item.Deadline)
+                                            {
                                                 <p class="mb-0 text-red"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
-                                            </td>
-                                        } else
-                                        {
-                                            <td>
+                                            }
+                                            else
+                                            {
                                                 <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
-                                            </td>
-                                        }
-                                        @*<td>
-                                            <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
-                                        </td>*@
+                                            }
+                                        </td>
+                                        <td>
+                                            @if(item.Deadline > DateTime.Now && item.Report == null)
+                                            {
+                                                <span class="mt-2 badge badge-pill border border-secondary text-secondary">On Progress</span>
+                                            } else if(item.Deadline < DateTime.Now && item.Report == null)
+                                            {
+                                                <span class="mt-2 badge badge-pill border border-danger text-danger">Overdue</span>
+                                            } else if(item.Report != null)
+                                            {
+                                                <span class="mt-2 badge badge-pill border border-success text-success">Uploaded</span>
+                                            }
+                                        </td>
+                                        <td>
                                         @if(item.Rating != null)
                                         {
-                                            <td>
-                                                <button class="btn bg-info-light" disabled>Rating</button>
-                                            </td>
-                                        } else
+                                            
+                                                <div class="rating-stars" id="ratingStars_@item.Rating?.Guid" value="@item.Rating?.RatingValue">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= item.Rating?.RatingValue)
+                                                        {
+                                                            <span class="fa fa-star checked" onclick="updateRating('@item.Rating?.Guid', @i)"></span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="fa fa-star" onclick="updateRating('@item.Rating?.Guid', @i)"></span>
+                                                        }
+                                                    }
+                                                </div>
+                                                @*<button class="btn bg-info-light" disabled>Rating</button>*@
+                                            
+                                        } else if(item.Rating == null)
                                         {
-                                            <td>
-                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" id="RatingTriggerModal" data-id="@item.Report?.Guid">Rating</a>
-                                            </td>
-                                        }
+                                                @*<a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" id="RatingTriggerModal" data-id="@item.Report?.Guid">Rating</a>*@
+                                                <button class="btn btn-danger" disabled>Report belum di upload</button>
+                                            }
+                                            else if (item.Rating == null && item.Report != null)
+                                            {
+                                                <a class="btn bg-info-light" href="@Url.Action("Creates", "Rating", new {item.Report?.Guid})">Berikan Rating</a>
+
+                                            }
+                                        </td>
                                         <td>
                                             @if(item.Report == null)
                                             {
                                                 
                                             <div class="media align-items-center mt-md-0 mt-3">
-                                                <a class="btn btn-outline-light-gray" role="button" disabled>Detail Report</a>
+                                                <a class="btn btn-warning" role="button" disabled>Detail Report</a>
                                                 </div>
                                             } else
                                             {
@@ -201,119 +241,6 @@
                             
                         </table>
 
-                        @*<div class="collapse" id="collapseEdit2">
-                            <div class="card card-list task-card">
-                                <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
-                                    <div class="header-title">
-                                        <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck006">
-                                            <div>
-                                                <h5 class="mb-2">Judul</h5>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <h5 class="mb-2">Description</h5>
-                                                    <p class="mb-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText4" class="h5">Assigned to</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label2" for="inputGroupFile002">Nama Karyawan</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText4" class="h5">Deadline</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label2" for="inputGroupFile002">Tanggal Deadline</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText4" class="h5">Created Date</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label2" for="inputGroupFile002">Tanggal Dibuat</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText4" class="h5">Modified Date</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label2" for="inputGroupFile002">Tanggal Diedit</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card mb-3">
-                                        <div class="card-body">
-                                            <div class="row">
-
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText01" class="h5">Attachments</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label2" for="inputGroupFile002">Nama File</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-group mb-0">
-                                                        <label for="exampleInputText01" class="h5"></label>
-                                                        <div class="custom-file">
-                                                            <button style="margin-top:6px;" class="btn bg-info-light">Download</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
                     </div>
                 </div>
                 <!-- Page end  -->
@@ -377,138 +304,24 @@
 
     <!-- Modal list start -->
     <!-- Rating Modal -->
-
-   @foreach(var item in Model)
-    {
-        <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="../Controllers/RatingController/Creates">
-                            <div class="form-group">
-                                <label asp-for="@item.Rating.Guid" class="control-label">Guid</label>
-                                <input id="valueGuid" class="form-control" />
-                           </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Rate</label>
-                                <div id="ratingStars" class="rating-stars">
-                                    <span class="fa fa-star" data-rating-value="1"></span>
-                                    <span class="fa fa-star" data-rating-value="2"></span>
-                                    <span class="fa fa-star" data-rating-value="3"></span>
-                                    <span class="fa fa-star" data-rating-value="4"></span>
-                                    <span class="fa fa-star" data-rating-value="5"></span>
-                                </div>
-                                <input id="ratingValue" name="RatingValue" type="hidden" />
-                                <span class="text-danger"></span>
-                            </div>
-
-                            <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" onclick="" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    }
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function () {
-            $('.modal').on('shown.bs.modal', function () {
-                var modalId = $(this).attr('id');
-                var guid = $(this).data('guid');
-                var ratingId = modalId.replace('ratingModal_', '');
-                var ratingValue = $('#ratingValue_' + ratingId).val();
-                $('#ratingStars_' + ratingId + ' span').each(function () {
-                    if ($(this).data('rating-value') <= ratingValue) {
-                        $(this).addClass('checked');
-                    } else {
-                        $(this).removeClass('checked');
-                    }
-                });
-            });
-
-            $('#ratingStars span').click(function () {
-                var ratingValue = $(this).data('rating-value');
-                updateCreateRating(ratingValue);
-                $('#ratingValue').val(ratingValue);
-            });
-
-            $('.modal form').submit(function (event) {
-                event.preventDefault(); // Prevent form submission
-
-                var modalId = $(this).closest('.modal').attr('id');
-                var ratingId = modalId.replace('ratingModal_', '');
-                var ratingValue = $('#ratingValue_' + ratingId).val();
-
-                // Get the comment value
-                var comment = $('#comment_' + ratingId).val();
-
-                // Submit the form
-                $(this).off('submit').submit();
-            });
-        });
-
-        function updateCreateRating(rating) {
-            var createRatingStars = $('#ratingStars span');
-            createRatingStars.each(function () {
-                if ($(this).data('rating-value') <= rating) {
+        function updateRating(guid, rating) {
+            var ratingStars = $('#ratingStars_' + guid + ' span');
+            ratingStars.each(function (index) {
+                if (index < rating) {
                     $(this).addClass('checked');
                 } else {
                     $(this).removeClass('checked');
                 }
             });
+
+            // Mengatur nilai rating pada atribut data-rating-value
+            $('#ratingStars_' + guid).data('rating-value', rating);
         }
     </script>
 
-
-
-@*    <script>
-        let selectedRating = 0;
-
-        function rate(rating) {
-            selectedRating = rating;
-
-            // Reset all stars to default state
-            const stars = document.getElementsByClassName('star');
-            for (let i = 0; i < stars.length; i++) {
-                stars[i].innerHTML = '&#9734;';
-                stars[i].classList.remove('checked');
-            }
-
-            // Fill selected stars
-            for (let i = 0; i < rating; i++) {
-                stars[i].innerHTML = '&#9733;';
-                stars[i].classList.add('checked');
-            }
-        }
-
-        function submitRating() {
-            const comment = document.getElementById('comment').value;
-
-            // Perform rating submission logic here
-            // You can send the selectedRating and comment to the server for further processing
-
-            // Example alert to show the selected rating and comment
-            alert('Rating: ' + selectedRating + '\nComment: ' + comment);
-
-            // Close the modal
-            $('#ratingModal').modal('hide');
-        }
-    </script>*@
 
     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
@@ -517,72 +330,10 @@
     <!-- Chart Custom JavaScript -->
     <script async src="~/assets/js/chart-custom.js"></script>
     <script src="~/assets/js/app.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 
 </body>
 </html>
 
-@*<h1>IndexManager</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Guid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subject)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Deadline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeGuid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Guid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subject)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeGuid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>*@

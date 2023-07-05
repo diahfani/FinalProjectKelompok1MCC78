@@ -203,12 +203,46 @@ public class ReportController : Controller
             taskList.Add(task);
         }
         var taskReport = new List<TaskReportVM>();
-        foreach(var task in taskList)
+        var taskReportRating = new List<TaskReportRatingVM>();
+        foreach (var task in taskList)
         {
             var getReport = await reprepository.Get(task.Guid);
-            if (getReport.Data != null)
+            var getRating = await _ratingRepository.Get(task.Guid);
+            if (getReport.Data != null && getRating.Data != null)
             {
-                var taskreport = new TaskReportVM
+                var taskreport = new TaskReportRatingVM
+                {
+                    Task = new Models.Task
+                    {
+                        Guid = task.Guid,
+                        Subject = task.Subject,
+                        Description = task.Description,
+                        Deadline = task.Deadline,
+                        EmployeeGuid = task.EmployeeGuid,
+                        CreatedDate = task.CreatedDate,
+                        ModifiedDate = task.ModifiedDate,
+                    },
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        FileType = getReport.Data.FileType,
+                    },
+                    Rating = new Rating
+                    {
+                        Guid = getRating.Data.Guid,
+                        RatingValue = getRating.Data.RatingValue,
+                        Comment = getRating.Data.Comment,
+                        CreatedDate = getRating.Data.CreatedDate,
+                        ModifiedDate = getRating.Data.ModifiedDate
+                    }
+                };
+                taskReportRating.Add(taskreport);
+            }
+            else if(getReport.Data != null) {
+                var taskreport = new TaskReportRatingVM
                 {
                     Task = new Models.Task
                     {
@@ -229,11 +263,12 @@ public class ReportController : Controller
                         FileType = getReport.Data.FileType,
                     }
                 };
-                taskReport.Add(taskreport);
+                taskReportRating.Add(taskreport);
+
             }
             else
             {
-                var taskreport = new TaskReportVM
+                var taskreport = new TaskReportRatingVM
                 {
                     Task = new Models.Task
                     {
@@ -247,7 +282,7 @@ public class ReportController : Controller
                     },
                     
                 };
-                taskReport.Add(taskreport);
+                taskReportRating.Add(taskreport);
             }
         }
         /*var result = await tasrepository.GetTaskByEmployeeId(employeeID);
@@ -256,7 +291,7 @@ public class ReportController : Controller
         {
             reports.Add(report);
         }*/
-        return View(taskReport);
+        return View(taskReportRating);
     }
 
     [HttpGet]

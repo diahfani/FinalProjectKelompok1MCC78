@@ -19139,7 +19139,7 @@ label {
 .form-control {
   height: 50px;
   line-height: 50px;
-  background: #F8F7F7;
+  background: white !important;
   border: 1px solid #E0E2DB;
   font-size: 14px;
   color: #605C8D;
