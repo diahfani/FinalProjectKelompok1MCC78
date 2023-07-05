@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Client.ViewModels.TaskReportEmployeeVM>
+﻿@model IEnumerable<Client.ViewModels.TaskReportEmployeeRatingVM>
 
 @{
     ViewData["Title"] = "IndexManager";
@@ -12,7 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>StatusManager</title>
+    <title>Status Manager</title>
 
     <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
     <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
@@ -170,18 +170,37 @@
                                         <td>
                                             @item.Subject
                                         </td>
-                                        <td>
+                                        @if(DateTime.Now > item.Deadline)
+                                        {
+                                            <td>
+                                                <p class="mb-0 text-red"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
+                                            </td>
+                                        } else
+                                        {
+                                            <td>
+                                                <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
+                                            </td>
+                                        }
+                                        @*<td>
                                             <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Deadline</p>
-                                        </td>
-                                        <td>
-                                            <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light">Rating</a>
-                                        </td>
+                                        </td>*@
+                                        @if(item.Rating != null)
+                                        {
+                                            <td>
+                                                <button class="btn bg-info-light" disabled>Rating</button>
+                                            </td>
+                                        } else
+                                        {
+                                            <td>
+                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" data-id="@item.Guid">Rating</a>
+                                            </td>
+                                        }
                                         <td>
                                             @if(item.Report == null)
                                             {
                                                 
                                             <div class="media align-items-center mt-md-0 mt-3">
-                                                <a class="btn btn-outline-success" role="button" disabled>Detail Report</a>
+                                                <a class="btn btn-outline-light-gray" role="button" disabled>Detail Report</a>
                                                 </div>
                                             } else
                                             {
@@ -372,33 +391,49 @@
 
     <!-- Modal list start -->
     <!-- Rating Modal -->
-    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
+@*    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="ratingModalLabel">Rate and Comment</h5>
+                    <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="rating-container">
-                        <span class="star" onclick="rate(1)">&#9734;</span>
-                        <span class="star" onclick="rate(2)">&#9734;</span>
-                        <span class="star" onclick="rate(3)">&#9734;</span>
-                        <span class="star" onclick="rate(4)">&#9734;</span>
-                        <span class="star" onclick="rate(5)">&#9734;</span>
-                    </div>
-                    <textarea class="custom-textbox"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="submitRating()">Submit</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <form asp-controller="Rating" asp-action="Creates" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Guid" class="control-label"></label>
+                            <input asp-for="Guid" class="form-control" />
+                            <span asp-validation-for="Guid" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="RatingValue" class="control-label"></label>
+                            <div id="ratingStars" class="rating-stars">
+                                <span class="fa fa-star" data-rating-value="1"></span>
+                                <span class="fa fa-star" data-rating-value="2"></span>
+                                <span class="fa fa-star" data-rating-value="3"></span>
+                                <span class="fa fa-star" data-rating-value="4"></span>
+                                <span class="fa fa-star" data-rating-value="5"></span>
+                            </div>
+                            <input id="ratingValue" name="RatingValue" type="hidden" />
+                            <span asp-validation-for="RatingValue" class="text-danger"></span>
+                        </div>
+
+                        <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
+*@
 
     <script>
         let selectedRating = 0;

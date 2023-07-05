@@ -1,6 +1,8 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Client.Controllers;
 
@@ -8,11 +10,69 @@ public class RatingController : Controller
 {
     private readonly IRatingRepository ratrepository;
     private readonly ITaskRepository taskrepository;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IReportRepository _reportRepository;
 
-    public RatingController(IRatingRepository _ratrepository, ITaskRepository _taskrepository)
+    public RatingController(IRatingRepository _ratrepository, ITaskRepository _taskrepository, IHttpContextAccessor httpContextAccessor, IReportRepository reportRepository)
     {
         this.ratrepository = _ratrepository;
         this.taskrepository = _taskrepository;
+        _httpContextAccessor = httpContextAccessor;
+        _reportRepository = reportRepository;
+    }
+
+    public async Task<IActionResult> IndexEmployee()
+    {
+        var employeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var getTask = await taskrepository.GetTaskByEmployeeId(employeId);
+        var listRating = new List<ReportRatingVM>();
+        foreach (var item in getTask.Data)
+        {
+            var getReport = await _reportRepository.Get(item.Guid);
+            var getRating = await ratrepository.Get(item.Guid);
+            if (getReport.Data != null && getRating.Data != null)
+            {
+                var list = new ReportRatingVM
+                {
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        CreatedDate = getReport.Data.CreatedDate,
+                        ModifiedDate = getReport.Data.ModifiedDate
+                    },
+                    Rating = new Rating
+                    {
+                        Guid = getRating.Data.Guid,
+                        RatingValue = getRating.Data.RatingValue,
+                        Comment = getRating.Data.Comment,
+                        CreatedDate = getRating.Data.CreatedDate,
+                        ModifiedDate = getRating.Data.ModifiedDate
+                    }
+                };
+                listRating.Add(list);
+            } 
+            else if (getReport.Data != null)
+            {
+                var list = new ReportRatingVM
+                {
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        CreatedDate = getReport.Data.CreatedDate,
+                        ModifiedDate = getReport.Data.ModifiedDate
+                    }
+                };
+                listRating.Add(list);
+            }
+            
+        }
+        return View(listRating);
     }
 
     public async Task<IActionResult> PerformanceEmployee()
@@ -49,6 +109,8 @@ public class RatingController : Controller
 
         return View(viewModel);
     }
+
+
 
     public async Task<IActionResult> StatusEmployee()
     {

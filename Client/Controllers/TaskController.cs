@@ -25,6 +25,8 @@ public class TaskController : Controller
         this.reprepository = reprepository;
     }
 
+    [HttpGet]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Index()
     {
         // ambil id manager
@@ -101,6 +103,8 @@ public class TaskController : Controller
         return View(tasks);*/
     }
 
+    [HttpGet]
+    [Authorize(Roles = "employee")]
     public async Task<IActionResult> IndexEmployee()
     {
         var employeeID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -162,8 +166,8 @@ public class TaskController : Controller
         return View(taskReport);
     }
 
-   /* [HttpGet]
-    [Authorize(Roles = "manager")]*/
+    [HttpGet]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Creates()
     {
         var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
@@ -191,7 +195,7 @@ public class TaskController : Controller
     }
 
     [HttpPost]
-    /*[Authorize(Roles = "manager")]*/
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Creates(Task task)
     {
         var result = await tasrepository.Post(task);
@@ -231,6 +235,7 @@ public class TaskController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Remove(Guid guid)
     {
         var result = await tasrepository.Deletes(guid);
@@ -242,6 +247,7 @@ public class TaskController : Controller
     }
 
     [HttpPost]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Edit(Task task)
     {
         var result = await tasrepository.Put(task);
@@ -259,6 +265,7 @@ public class TaskController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "manager")]
     public async Task<IActionResult> Edit(Guid guid)
     {
         var managerID = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));

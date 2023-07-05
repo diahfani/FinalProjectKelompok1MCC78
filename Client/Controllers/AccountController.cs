@@ -3,6 +3,7 @@ using Client.Repositories.Interface;
 using Client.ViewModels;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Client.Controllers
 {
@@ -20,6 +21,7 @@ namespace Client.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Logins()
         {
             if (HttpContext.Session.GetString("JWToken") != null)
@@ -112,6 +114,7 @@ namespace Client.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> Registers()
         {
             var getRoleManager = await _accountRoleRepository.GetRoleManager();

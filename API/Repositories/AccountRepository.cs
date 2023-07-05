@@ -51,6 +51,10 @@ public class AccountRepository : GeneralRepository<Account>, IAccountRepository
 
         try
         {
+            if (registerVM.ManagerID == Guid.Empty || registerVM.ManagerID == null)
+            {
+                registerVM.ManagerID = null;
+            }
             var employee = new Employee
             {
                 NIK = registerVM.NIK,
@@ -59,6 +63,7 @@ public class AccountRepository : GeneralRepository<Account>, IAccountRepository
                 Email = registerVM.Email,
                 PhoneNumber = registerVM.PhoneNumber,
                 HiringDate = registerVM.HiringDate,
+                ManagerID = registerVM.ManagerID,
             };
             var result = _employeeRepository.Create(employee);
 

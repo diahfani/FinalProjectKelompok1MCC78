@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Client.ViewModels.TaskReportVM>
+﻿@model IEnumerable<Client.ViewModels.ReportRatingVM>
 
 @{
     ViewData["Title"] = "IndexEmployee";
@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Task</title>
+    <title>List Rating - Employee</title>
 
     <link rel="stylesheet" href="~/assets/css/backend-plugin.min.css">
     <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
@@ -43,7 +43,7 @@
                                 <span class="ml-4">Dashboard</span>
                             </a>
                         </li>
-                        <li class="Active">
+                        <li class="">
                             <a asp-controller="Task" asp-action="IndexEmployee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
@@ -64,7 +64,7 @@
                             </a>
                         </li>
 
-                        <li class="">
+                        <li class="Active">
                             <a asp-controller="Rating" asp-action="IndexEmployee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -128,9 +128,9 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
-                                    <h5>List Task</h5>
+                                    <h5>List Rating</h5>
                                     @*<div class="d-flex flex-wrap align-items-center">
-                                        <a href="@Url.Action("Creates", "Task")" class="btn btn-primary">New Task</a>
+                                    <a href="@Url.Action("Creates", "Task")" class="btn btn-primary">New Task</a>
                                     </div>*@
                                 </div>
                             </div>
@@ -148,29 +148,38 @@
                                             <div class="card card-widget task-card">
                                                 <div class="card-body">
                                                     <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                        <div class="d-flex align-items-center">
-                                                            <div>
-                                                                <h5 class="mb-2"> @Html.DisplayFor(modelItem => item.Task.Subject)</h5>
-                                                            </div>
-                                                        </div>
+
                                                         @if (item.Report != null)
                                                         {
-                                                            <div class="flex align-items-center list-user-action">
-                                                                <button class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
-                                                                   data-original-title="Already uploaded" disabled>
-                                                                    Add Report
-                                                                </button>
+                                                            <div class="d-flex align-items-center">
+                                                                <div>
+                                                                    <h5 class="mb-2">@item.Report.Subject</h5>
+                                                                </div>
                                                             </div>
-                                                        } else
+                                                            <div class="d-flex align-items-center">
+                                                                <div>
+                                                                    <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Report.CreatedDate</p>
+                                                                </div>
+                                                            </div>
+
+                                                        }
+                                                        @if (item.Rating != null)
                                                         {
                                                             <div class="flex align-items-center list-user-action">
-                                                                <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
-                                                                   data-original-title="Add" href="@Url.Action("Creates", "Report", new { item.Task.Guid/* id=item.PrimaryKey */ })">
-                                                                    Add Report
+                                                                <a data-toggle="modal" data-target="#ratingModal_@item.Rating.Guid" class="btn bg-info-light">
+                                                                    Rating
                                                                 </a>
                                                             </div>
                                                         }
-                                                        
+                                                        else
+                                                        {
+                                                            <div class="flex align-items-center list-user-action">
+                                                                <button class="btn btn-outline-light-gray" disabled>
+                                                                    Rating
+                                                                </button>
+                                                            </div>
+                                                        }
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -192,6 +201,115 @@
             </div>
         </div>
     </div>
+
+    @foreach (var item in Model)
+    {
+        @if(item.Rating != null)
+        {
+            <div class="modal fade" id="ratingModal_@item.Rating.Guid" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel_@item.Rating.Guid" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ratingModalLabel_@item.Rating.Guid">Rating</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Index" method="get">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" name="guid" value="@item.Rating.Guid" />
+                                <input type="hidden" name="ratingValue" value="@item.Rating.RatingValue" />
+
+                                <div class="rating-stars" id="ratingStars_@item.Rating.Guid" value="@item.Rating.RatingValue">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= item.Rating.RatingValue)
+                                        {
+                                            <span class="fa fa-star checked" onclick="updateRating('@item.Rating.Guid', @i)"></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-star" onclick="updateRating('@item.Rating.Guid', @i)"></span>
+                                        }
+                                    }
+                                </div>
+
+
+
+                                <textarea class="custom-textbox" name="comment" readonly>@item.Rating.Comment</textarea>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+        <!-- Modal -->
+
+    }
+
+
+    <script>
+        $(document).ready(function () {
+            $('.modal').on('shown.bs.modal', function () {
+                var modalId = $(this).attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = $('#ratingValue_' + ratingId).val();
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).data('rating-value') <= ratingValue) {
+                        $(this).addClass('checked');
+                    } else {
+                        $(this).removeClass('checked');
+                    }
+                });
+            });
+
+            $('.modal form').submit(function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                var modalId = $(this).closest('.modal').attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = 0;
+
+                // Determine the selected rating value
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).hasClass('checked')) {
+                        ratingValue = $(this).data('rating-value');
+                    }
+                });
+
+                // Get the comment value
+                var comment = $('#comment_' + ratingId).val();
+
+                // Set the values in the hidden input fields
+                $('#ratingValue_' + ratingId).val(ratingValue);
+
+                // Submit the form
+                $(this).off('submit').submit();
+            });
+        });
+
+        function updateRating(guid, rating) {
+            var ratingStars = $('#ratingStars_' + guid + ' span');
+            ratingStars.each(function (index) {
+                if (index < rating) {
+                    $(this).addClass('checked');
+                } else {
+                    $(this).removeClass('checked');
+                }
+            });
+
+            // Mengatur nilai rating pada atribut data-rating-value
+            $('#ratingStars_' + guid).data('rating-value', rating);
+        }
+    </script>
+
     <!-- Wrapper End-->
     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
@@ -216,57 +334,33 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Guid)
+                @Html.DisplayNameFor(model => model.Report.Subject)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Subject)
+                @Html.DisplayNameFor(model => model.Report.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Rating.RatingValue)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Deadline)
+                @Html.DisplayNameFor(model => model.Rating.Comment)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmployeeGuid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Guid)
+                @Html.DisplayFor(modelItem => item.Report.Subject)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Subject)
+                @Html.DisplayFor(modelItem => item.Report.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Rating.RatingValue)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Deadline)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmployeeGuid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModifiedDate)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.DisplayFor(modelItem => item.Rating.Comment)
             </td>
         </tr>
 }
