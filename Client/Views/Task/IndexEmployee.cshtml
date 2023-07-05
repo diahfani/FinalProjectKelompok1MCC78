@@ -158,35 +158,40 @@
                                     <div class="col-lg-12">
                                         @foreach (var item in Model)
                                         {
-                                            <div class="card card-widget task-card">
-                                                <div class="card-body">
-                                                    <div class="d-flex flex-wrap align-items-center justify-content-between">
-                                                        <div class="d-flex align-items-center">
-                                                            <div>
-                                                                <h5 class="mb-2"> @Html.DisplayFor(modelItem => item.Task.Subject)</h5>
+                                            @if(item.Report == null)
+                                            {
+                                                <div class="card card-widget task-card">
+                                                    <div class="card-body">
+                                                        <div class="d-flex flex-wrap align-items-center justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                <div>
+                                                                    <h5 class="mb-2"> @Html.DisplayFor(modelItem => item.Task.Subject)</h5>
+                                                                </div>
                                                             </div>
+                                                            @if (item.Report != null)
+                                                            {
+                                                                <div class="flex align-items-center list-user-action">
+                                                                    <button class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
+                                                                            data-original-title="Already uploaded" disabled>
+                                                                        Add Report
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="flex align-items-center list-user-action">
+                                                                    <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
+                                                                       data-original-title="Add" href="@Url.Action("Creates", "Report", new { item.Task.Guid/* id=item.PrimaryKey */ })">
+                                                                        Add Report
+                                                                    </a>
+                                                                </div>
+                                                            }
+
                                                         </div>
-                                                        @if (item.Report != null)
-                                                        {
-                                                            <div class="flex align-items-center list-user-action">
-                                                                <button class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
-                                                                   data-original-title="Already uploaded" disabled>
-                                                                    Add Report
-                                                                </button>
-                                                            </div>
-                                                        } else
-                                                        {
-                                                            <div class="flex align-items-center list-user-action">
-                                                                <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
-                                                                   data-original-title="Add" href="@Url.Action("Creates", "Report", new { item.Task.Guid/* id=item.PrimaryKey */ })">
-                                                                    Add Report
-                                                                </a>
-                                                            </div>
-                                                        }
-                                                        
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                            }
                                         }
                                     </div>
 
