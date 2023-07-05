@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Client.Models
 {
@@ -7,6 +8,7 @@ namespace Client.Models
         public Guid Guid { get; set; }
         public string Subject { get; set; }
         public string Description { get; set; }
+        [Required(ErrorMessage ="Gaboleh kosong")]
         public DateTime Deadline { get; set; }
         public Guid EmployeeGuid { get; set; }
         public DateTime CreatedDate { get; set; }

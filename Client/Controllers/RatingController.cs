@@ -114,21 +114,56 @@ public class RatingController : Controller
 
     public async Task<IActionResult> StatusEmployee()
     {
-        var result = await ratrepository.Get();
-        var ratings = new List<Rating>();
-
-        if (result.Data != null)
+        var employeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var getTask = await taskrepository.GetTaskByEmployeeId(employeId);
+        var listRating = new List<ReportRatingVM>();
+        foreach (var item in getTask.Data)
         {
-            ratings = result.Data.Select(e => new Rating
+            var getReport = await _reportRepository.Get(item.Guid);
+            var getRating = await ratrepository.Get(item.Guid);
+            if (getReport.Data != null && getRating.Data != null)
             {
-                Guid = e.Guid,
-                RatingValue = e.RatingValue,
-                Comment = e.Comment,
-                CreatedDate = e.CreatedDate,
-                ModifiedDate = e.ModifiedDate
-            }).ToList();
+                var list = new ReportRatingVM
+                {
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        CreatedDate = getReport.Data.CreatedDate,
+                        ModifiedDate = getReport.Data.ModifiedDate
+                    },
+                    Rating = new Rating
+                    {
+                        Guid = getRating.Data.Guid,
+                        RatingValue = getRating.Data.RatingValue,
+                        Comment = getRating.Data.Comment,
+                        CreatedDate = getRating.Data.CreatedDate,
+                        ModifiedDate = getRating.Data.ModifiedDate
+                    }
+                };
+                listRating.Add(list);
+            }
+            else if (getReport.Data != null)
+            {
+                var list = new ReportRatingVM
+                {
+                    Report = new Report
+                    {
+                        Guid = getReport.Data.Guid,
+                        Subject = getReport.Data.Subject,
+                        Description = getReport.Data.Description,
+                        FileName = getReport.Data.FileName,
+                        CreatedDate = getReport.Data.CreatedDate,
+                        ModifiedDate = getReport.Data.ModifiedDate
+                    }
+                };
+                listRating.Add(list);
+            }
+
         }
-        return View(ratings);
+        return View(listRating);
     }
 
 

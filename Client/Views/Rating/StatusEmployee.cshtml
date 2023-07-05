@@ -1,8 +1,9 @@
 ﻿
-@model IEnumerable<Client.Models.Rating>
+@model IEnumerable<Client.ViewModels.ReportRatingVM>
 
 @{
     Layout = null;
+    string fullname = User.Identity.Name;
 }
 
 <!DOCTYPE html>
@@ -42,7 +43,7 @@
       
       <div class="iq-sidebar  sidebar-default ">
           <div class="iq-sidebar-logo d-flex align-items-center">
-              <a asp-controller="Home" asp-action="StatusEmployee" class="header-logo">
+              <a asp-controller="Employee" asp-action="Employee" class="header-logo">
                   <img src="~/assets/images/logo.svg" alt="logo">
                   <h3 class="logo-title light-logo">Status</h3>
               </a>
@@ -54,22 +55,42 @@
               <nav class="iq-sidebar-menu">
                   <ul id="iq-sidebar-toggle" class="iq-menu">
                       <li class="">
-                          <a asp-controller="Home" asp-action="Employee" class="svg-icon">                        
+                          <a asp-controller="Employee" asp-action="Employee" class="svg-icon">                        
                               <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
                               </svg>
-                              <span class="ml-4">Employee</span>
+                              <span class="ml-4">Dashboard</span>
                           </a>
                       </li>
-                      <li class="active">
-                          <a asp-controller="Rating" asp-action="StatusEmployee" class="svg-icon">                        
-                              <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <li class="">
+                            <a asp-controller="Task" asp-action="IndexEmployee" class="svg-icon">
+                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                   <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                   <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>
                               </svg>
                               <span class="ml-4">Status</span>
                           </a>
                       </li>
+                        <li class="">
+                            <a asp-controller="Report" asp-action="IndexEmployee" class="svg-icon">
+                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                                <span class="ml-4">History Report</span>
+                            </a>
+                        </li>
+                        <li class="Active">
+                            <a asp-controller="Rating" asp-action="IndexEmployee" class="svg-icon">
+                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                                <span class="ml-4">Feedback Report</span>
+                            </a>
+                        </li>
                       <li class="">
                           <a asp-controller="Rating" asp-action="PerformanceEmployee" class="svg-icon">                        
                               <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -115,7 +136,7 @@
                                           <svg class="svg-icon mr-0 text-primary" id="h-05-p" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                                           </svg>
-                                          <a asp-controller="Home" asp-action="Login">Logout</a>
+                                          <a asp-controller="Account" asp-action="Logout">Logout</a>
                                       </li>
                                   </ul>
                               </li>
@@ -132,7 +153,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
-                            <h5>Status</h5>
+                            <h5>List Rating</h5>
                            
                         </div>
                     </div>
@@ -142,34 +163,52 @@
          <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
             <div class="table-responsive rounded bg-white mb-4">
                 <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
-                    <tbody>
-                        
-                        <tr>
-                            <td>Karyawan 1</td>
-                            <td>
-                                Create unique style of inner pages
-                            </td>
-                            <td>
-                                <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
-                            </td>
-                            <td>
-                                
-                                @foreach (var item in Model)
-            {
-                               <a data-toggle="modal" data-target="#ratingModal_@item.Guid" class="btn bg-info-light">Rating</a>
-            }
-                            </td>
-                            <td>
-                               
-                                <div class="media align-items-center mt-md-0 mt-3">
-                                  <a class="btn bg-success-light" data-toggle="collapse" href="#collapseEdit2" role="button" aria-expanded="false" aria-controls="collapseEdit2"><i class="ri-edit-box-line m-0"></i></a>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
+                            @foreach(var item in Model)
+                            {
+                                @if(item.Report != null)
+                                {
+                                    <tbody>
+
+                                        <tr>
+
+                                            <td>@item.Report.Subject</td>
+                                            <td>
+                                                <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Report.CreatedDate</p>
+                                            </td>
+                                            @*<td>
+                                    <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
+                                    </td>*@
+                                            <td>
+
+                                                @if (item.Rating != null)
+                                                {
+                                                    <a data-toggle="modal" data-target="#ratingModal_@item.Rating.Guid" class="btn bg-info-light">Rating</a>
+                                                }
+                                                else
+                                                {
+                                                    <div class="flex align-items-center list-user-action">
+                                                        <button class="btn btn-outline-light-gray" disabled>
+                                                            Rating
+                                                        </button>
+                                                    </div>
+
+                                                }
+                                            </td>
+                                            @*<td>
+
+                                    <div class="media align-items-center mt-md-0 mt-3">
+                                    <a class="btn bg-success-light" data-toggle="collapse" href="#collapseEdit2" role="button" aria-expanded="false" aria-controls="collapseEdit2"><i class="ri-edit-box-line m-0"></i></a>
+                                    </div>
+                                    </td>*@
+                                        </tr>
+                                    </tbody>
+
+                                }
+
+                            }
                 </table>
                 
-                <div class="collapse" id="collapseEdit2">                                            
+@*                <div class="collapse" id="collapseEdit2">                                            
                                     <div class="card card-list task-card">
                                         <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
                                             <div class="header-title">
@@ -260,7 +299,7 @@
                                         </div>
                                     </div>
                                 </div> 
-            </div>
+*@            </div>
         </div>
         <!-- Page end  -->
     </div>
@@ -269,49 +308,53 @@
 
      @foreach (var item in Model)
             {
-                <!-- Modal -->
-<div class="modal fade" id="ratingModal_@item.Guid" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel_@item.Guid" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="ratingModalLabel_@item.Guid">Rating</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form asp-action="Index" method="get">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                     <input type="hidden" name="guid" value="@item.Guid" />
-                    <input type="hidden" name="ratingValue" value="@item.RatingValue" />
+        @if(item.Rating != null)
+        {
+            <!-- Modal -->
+            <div class="modal fade" id="ratingModal_@item.Rating?.Guid" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel_@item.Rating?.Guid" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ratingModalLabel_@item.Rating?.Guid">Rating</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form asp-action="Index" method="get">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" name="guid" value="@item.Rating?.Guid" />
+                                <input type="hidden" name="ratingValue" value="@item.Rating?.RatingValue" />
 
-                <div class="rating-stars" id="ratingStars_@item.Guid" value="@item.RatingValue">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        if (i <= item.RatingValue)
-                        {
-                            <span class="fa fa-star checked" onclick="updateRating('@item.Guid', @i)"></span>
-                        }
-                        else
-                        {
-                            <span class="fa fa-star" onclick="updateRating('@item.Guid', @i)"></span>
-                        }
-                    }
-                </div>
-                
-                   
+                                <div class="rating-stars" id="ratingStars_@item.Rating?.Guid" value="@item.Rating?.RatingValue">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        if (i <= item.Rating?.RatingValue)
+                                        {
+                                            <span class="fa fa-star checked" onclick="updateRating('@item.Rating?.Guid', @i)"></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-star" onclick="updateRating('@item.Rating?.Guid', @i)"></span>
+                                        }
+                                    }
+                                </div>
 
-                    <textarea class="custom-textbox" name="comment">@item.Comment</textarea>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
+                                <textarea class="custom-textbox" name="comment">@item.Rating?.Comment</textarea>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+
+        }
 
             }
 
