@@ -109,7 +109,7 @@ p {
   font-size: 44px;
   font-weight: 600;
   color: #121212;
-  line-height: 55px; }
+  line-height: 135px !important; }
   @media (max-width: 767px) {
     .section-title .title {
       font-size: 30px;
