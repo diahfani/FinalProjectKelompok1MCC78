@@ -198,6 +198,10 @@ public class TaskController : Controller
     [Authorize(Roles = "manager")]
     public async Task<IActionResult> Creates(Task task)
     {
+        /*if (!ModelState.IsValid)
+        {
+            return View();
+        }*/
         var result = await tasrepository.Post(task);
         if (result.Code == 200)
         {

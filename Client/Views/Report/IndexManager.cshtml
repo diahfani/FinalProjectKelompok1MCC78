@@ -19,36 +19,22 @@
     <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
 
     <style>
-        /* Custom styles for the rating modal */
-        .rating-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            justify-content: center;
+        .rating-stars {
+            color: rgb(219, 219, 219);
         }
 
-            .rating-container .star {
-                font-size: 50px;
-                color: #ccc;
-                cursor: pointer;
+            .rating-stars .fa-star {
+                font-size: 20px;
             }
 
-                .rating-container .star.checked {
-                    color: #f8b739;
+                .rating-stars .fa-star.checked {
+                    color: gold;
                 }
 
-                    .rating-container .star:hover,
-                    .rating-container .star.checked:hover {
-                        color: #f8b739;
-                    }
-
-                .rating-container .star:last-child {
-                    margin-right: 0;
-                }
-
-        .modal-body .custom-textbox {
-            width: 470px;
-            height: 400px;
+        .custom-textbox {
+            width: 100%;
+            height: 100px;
+            resize: vertical;
         }
     </style>
 
@@ -192,7 +178,7 @@
                                         } else
                                         {
                                             <td>
-                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" data-id="@item.Guid">Rating</a>
+                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" id="RatingTriggerModal" data-id="@item.Report?.Guid">Rating</a>
                                             </td>
                                         }
                                         <td>
@@ -391,51 +377,106 @@
 
     <!-- Modal list start -->
     <!-- Rating Modal -->
-@*    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form asp-controller="Rating" asp-action="Creates" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="form-group">
-                            <label asp-for="Guid" class="control-label"></label>
-                            <input asp-for="Guid" class="form-control" />
-                            <span asp-validation-for="Guid" class="text-danger"></span>
-                        </div>
 
-                        <div class="form-group">
-                            <label asp-for="RatingValue" class="control-label"></label>
-                            <div id="ratingStars" class="rating-stars">
-                                <span class="fa fa-star" data-rating-value="1"></span>
-                                <span class="fa fa-star" data-rating-value="2"></span>
-                                <span class="fa fa-star" data-rating-value="3"></span>
-                                <span class="fa fa-star" data-rating-value="4"></span>
-                                <span class="fa fa-star" data-rating-value="5"></span>
+   @foreach(var item in Model)
+    {
+        <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Create New Rating</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="../Controllers/RatingController/Creates">
+                            <div class="form-group">
+                                <label asp-for="@item.Rating.Guid" class="control-label">Guid</label>
+                                <input id="valueGuid" class="form-control" />
+                           </div>
+
+                            <div class="form-group">
+                                <label class="control-label">Rate</label>
+                                <div id="ratingStars" class="rating-stars">
+                                    <span class="fa fa-star" data-rating-value="1"></span>
+                                    <span class="fa fa-star" data-rating-value="2"></span>
+                                    <span class="fa fa-star" data-rating-value="3"></span>
+                                    <span class="fa fa-star" data-rating-value="4"></span>
+                                    <span class="fa fa-star" data-rating-value="5"></span>
+                                </div>
+                                <input id="ratingValue" name="RatingValue" type="hidden" />
+                                <span class="text-danger"></span>
                             </div>
-                            <input id="ratingValue" name="RatingValue" type="hidden" />
-                            <span asp-validation-for="RatingValue" class="text-danger"></span>
-                        </div>
 
-                        <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
+                            <textarea class="custom-textbox" name="comment" id="createComment"></textarea>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" onclick="" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-*@
 
+    }
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script>
+        $(document).ready(function () {
+            $('.modal').on('shown.bs.modal', function () {
+                var modalId = $(this).attr('id');
+                var guid = $(this).data('guid');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = $('#ratingValue_' + ratingId).val();
+                $('#ratingStars_' + ratingId + ' span').each(function () {
+                    if ($(this).data('rating-value') <= ratingValue) {
+                        $(this).addClass('checked');
+                    } else {
+                        $(this).removeClass('checked');
+                    }
+                });
+            });
+
+            $('#ratingStars span').click(function () {
+                var ratingValue = $(this).data('rating-value');
+                updateCreateRating(ratingValue);
+                $('#ratingValue').val(ratingValue);
+            });
+
+            $('.modal form').submit(function (event) {
+                event.preventDefault(); // Prevent form submission
+
+                var modalId = $(this).closest('.modal').attr('id');
+                var ratingId = modalId.replace('ratingModal_', '');
+                var ratingValue = $('#ratingValue_' + ratingId).val();
+
+                // Get the comment value
+                var comment = $('#comment_' + ratingId).val();
+
+                // Submit the form
+                $(this).off('submit').submit();
+            });
+        });
+
+        function updateCreateRating(rating) {
+            var createRatingStars = $('#ratingStars span');
+            createRatingStars.each(function () {
+                if ($(this).data('rating-value') <= rating) {
+                    $(this).addClass('checked');
+                } else {
+                    $(this).removeClass('checked');
+                }
+            });
+        }
+    </script>
+
+
+
+@*    <script>
         let selectedRating = 0;
 
         function rate(rating) {
@@ -467,7 +508,7 @@
             // Close the modal
             $('#ratingModal').modal('hide');
         }
-    </script>
+    </script>*@
 
     <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
