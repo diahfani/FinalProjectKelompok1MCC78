@@ -54,7 +54,7 @@
                         </li>
 
                         <li class="">
-                            <a asp-controller="Report" asp-action="IndexEmployee" class="svg-icon">
+                            <a asp-controller="Report" asp-action="StatusEmployee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -65,7 +65,7 @@
                         </li>
 
                         <li class="">
-                            <a asp-controller="Rating" asp-action="IndexEmployee" class="svg-icon">
+                            <a asp-controller="Rating" asp-action="StatusEmployee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -74,6 +74,18 @@
                                 <span class="ml-4">Feedback Report</span>
                             </a>
                         </li>
+                        <li class="">
+                            <a asp-controller="Rating" asp-action="PerformanceEmployee" class="svg-icon">
+                                <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span class="ml-4">Performance</span>
+                            </a>
+                        </li>
+
 
                     </ul>
                 </nav>
@@ -128,17 +140,17 @@
                         <div class="card card-block card-stretch card-height">
                             <div class="card-body">
                                 <div class="top-block d-flex align-items-center justify-content-between">
-                                    <h5>Investment</h5>
-                                    <span class="badge badge-primary">Monthly</span>
-                                </div>
-                                <h3>$<span class="counter">35000</span></h3>
-                                <div class="d-flex align-items-center justify-content-between mt-1">
+                                    <h5>Total Tugas</h5>
+@*                                    <span class="badge badge-primary">Monthly</span>
+*@                                </div>
+                                <h3><span class="counter">8</span></h3>
+@*                                <div class="d-flex align-items-center justify-content-between mt-1">
                                     <p class="mb-0">Total Revenue</p>
                                     <span class="text-primary">65%</span>
                                 </div>
-                                <div class="iq-progress-bar bg-primary-light mt-2">
+*@                                @*<div class="iq-progress-bar bg-primary-light mt-2">
                                     <span class="bg-primary iq-progress progress-1" data-percent="65"></span>
-                                </div>
+                                </div>*@
                             </div>
                         </div>
                     </div>

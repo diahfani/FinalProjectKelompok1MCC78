@@ -1,6 +1,7 @@
 ﻿using Client.Models;
 using Client.Repositories.Interface;
 using Client.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -167,9 +168,12 @@ public class RatingController : Controller
     }
 
 
-
+    [HttpGet]
+    [Authorize(Roles ="manager")]
     public async Task<IActionResult> Creates()
     {
+        Guid reportId = Guid.Parse(Request.Query["Guid"]);
+        ViewData["ReportId"] = reportId;
         return View();
     }
 

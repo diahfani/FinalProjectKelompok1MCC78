@@ -51,6 +51,7 @@ public class EmployeeController : Controller
         var result = await emprepository.GetEmployeeByManagerID(managerID);
         var employeeManager = new List<Employee>();
 
+
         if(result.Data!= null)
         {
             employeeManager = result.Data.Select(e => new Employee
@@ -67,6 +68,8 @@ public class EmployeeController : Controller
                 ManagerID = e.ManagerID
             }).ToList();
         }
+        var countEmployee = employeeManager.Count;
+        ViewBag.countEmployee = countEmployee;
         return View(employeeManager);
     }
     /*public Task<IActionResult> Creates()
@@ -82,6 +85,7 @@ public class EmployeeController : Controller
         var employeeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
         var result = await emprepository.Get(employeeId);
         /*var employeeManager = new List<Employee>();*/
+        
 
         if (result.Data != null)
         {

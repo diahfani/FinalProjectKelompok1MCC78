@@ -13,6 +13,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Status Manager</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
 
     <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
     <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
@@ -175,10 +178,11 @@
                                             <td>
                                                 <button class="btn bg-info-light" disabled>Rating</button>
                                             </td>
-                                        } else
+                                        } else if(item.Rating == null && item.Report != null)
                                         {
                                             <td>
-                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" id="RatingTriggerModal" data-id="@item.Report?.Guid">Rating</a>
+                                                @*<a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light" id="RatingTriggerModal" data-id="@item.Report?.Guid">Rating</a>*@
+                                                <a class="btn bg-info-light" href="@Url.Action("Creates", "Rating", new {item.Report?.Guid})">Rating</a>
                                             </td>
                                         }
                                         <td>
