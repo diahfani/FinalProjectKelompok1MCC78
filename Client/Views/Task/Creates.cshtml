@@ -17,7 +17,27 @@
     <link rel="stylesheet" href="~/assets/css/backend-plugin.min.css">
     <link rel="stylesheet" href="~/assets/css/backend.css?v=1.0.0">
     <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
+    @*<script type="text/javascript">
+        window.onload = function (){
+            var dtToday = new Date();
 
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate();
+            var year = dtToday.getFullYear();
+            if (month < 10){
+
+                month = '0' + month.toString();
+            }
+            if (day < 10){
+
+                day = '0' + day.toString();
+            }
+            var maxDate = year + '-' + month + '-' + day;
+            $('#inputdate').attr('min', maxDate);
+        }
+        
+    </script>*@
+    
 </head>
 <body class="  ">
     <!-- Wrapper Start -->
@@ -141,7 +161,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="Deadline">Deadline :</label>
-                                        <input asp-for="Deadline" class="form-control" required>
+                                        <input asp-for="Deadline" class="form-control" name="inputdate" id="inputdate" required>
                                         <span asp-validation-for="Deadline" class="text-danger"></span>
                                     </div>
                                     
@@ -181,7 +201,27 @@
         </div>
     </div>
     <!-- Wrapper End-->
-    <!-- Backend Bundle JavaScript -->
+    @*<script type="text/javascript">
+        window.onload=function(){
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementsByName("setTodaysDate")[0].setAttribute('min', today);
+        }
+    </script>*@
+    @*<script type="text/javascript">
+        $(function () {
+            var dtToday = new Date();
+            var month = dtToday.getMonth() + 1;
+            var year = dtToday.getFullYear();
+            if (month < 10) {
+                month = '0' + month.toString();
+            }
+            if (day<10) {
+                day = '0' + day.toString();
+            }
+            var maxDate = year + '-' + month + '-' + day;
+            $('#inputdate').attr('min', maxDate);
+        })
+    </script> *@   <!-- Backend Bundle JavaScript -->
     <script src="~/assets/js/backend-bundle.min.js"></script>
 
 
@@ -195,60 +235,7 @@
 </body>
 </html>
 
-@*<h1>Creates</h1>
 
-<h4>Task</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Creates" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group" hidden>
-                <label asp-for="Guid" class="control-label"></label>
-                <input asp-for="Guid" class="form-control" />
-                <span asp-validation-for="Guid" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Subject" class="control-label"></label>
-                <input asp-for="Subject" class="form-control" />
-                <span asp-validation-for="Subject" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Deadline" class="control-label"></label>
-                <input asp-for="Deadline" class="form-control" />
-                <span asp-validation-for="Deadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EmployeeGuid" class="control-label"></label>
-                <input asp-for="EmployeeGuid" class="form-control" />
-                <span asp-validation-for="EmployeeGuid" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group" hidden>
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-*@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

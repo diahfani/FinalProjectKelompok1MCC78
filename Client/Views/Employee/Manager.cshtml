@@ -4,6 +4,8 @@
     ViewData["Title"] = "Manager";
     Layout = null;
     string fullname = User.Identity.Name;
+    var countEmployee = ViewData["countEmployee"];
+    Console.Write(countEmployee);
 }
 
 
@@ -122,7 +124,7 @@
                                     <h5>Total Employee</h5>
 @*                                    <span class="badge badge-primary">Monthly</span>
 *@                                </div>
-                                <h3><span class="counter">7</span></h3>
+                                <h3><span class="counter">@countEmployee</span></h3>
                                 <div class="d-flex align-items-center justify-content-between mt-1">
                                     @*<p class="mb-0">Total Revenue</p>*@
                                     @*<span class="text-primary">65%</span>*@
@@ -145,29 +147,6 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <div class="row justify-content-between">
-                                        @*<div class="col-sm-6 col-md-6">
-                                            <div id="user_list_datatable_info" class="dataTables_filter">
-                                                <form class="mr-3 position-relative">
-                                                    <div class="form-group mb-0">
-                                                        <input type="search" class="form-control" id="exampleInputSearch" placeholder="Search"
-                                                               aria-controls="user-list-table">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
-                                            <div class="user-list-files d-flex">
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Print
-                                                </a>
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Excel
-                                                </a>
-                                                <a class="bg-primary" href="javascript:void();">
-                                                    Pdf
-                                                </a>
-                                            </div>
-                                        </div>*@
                                     </div>
                                     <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid"
                                            aria-describedby="user-list-page-info">
