@@ -11,11 +11,13 @@ public class EmployeeController : Controller
 {
     private readonly IEmployeeRepository emprepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ITaskRepository taskrepository;
 
-    public EmployeeController(IEmployeeRepository _emprepository, IHttpContextAccessor http)
+    public EmployeeController(IEmployeeRepository _emprepository, IHttpContextAccessor http, ITaskRepository taskrepository)
     {
         this.emprepository = _emprepository;
         _httpContextAccessor = http;
+        this.taskrepository = taskrepository;
     }
 
     public async Task<IActionResult> Index()
@@ -69,7 +71,7 @@ public class EmployeeController : Controller
             }).ToList();
         }
         var countEmployee = employeeManager.Count;
-        ViewBag.countEmployee = countEmployee;
+        ViewData["countEmployee"] = countEmployee;
         return View(employeeManager);
     }
     /*public Task<IActionResult> Creates()
@@ -83,28 +85,28 @@ public class EmployeeController : Controller
     {
         /*var managerGUID = Guid.Parse(User.Claims.)*/
         var employeeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
-        var result = await emprepository.Get(employeeId);
+        var result = await taskrepository.GetTaskByEmployeeId(employeeId);
+        var listTask = new List<Models.Task>();
         /*var employeeManager = new List<Employee>();*/
-        
+
 
         if (result.Data != null)
         {
-            var employeeDetails =  new Employee
+            listTask = result.Data.Select(e => new Models.Task
             {
-                Guid = result.Data.Guid,
-                NIK = result.Data.NIK,
-                Fullname = result.Data.Fullname,
-                Gender = result.Data.Gender,
-                Email = result.Data.Email,
-                PhoneNumber = result.Data.PhoneNumber,
-                HiringDate = result.Data.HiringDate,
-                CreatedDate = result.Data.CreatedDate,
-                ModifiedDate = result.Data.ModifiedDate,
-                ManagerID = result.Data.ManagerID
-            };
-            return View(employeeDetails);
+                Guid = e.Guid,
+                Subject = e.Subject,
+                Description = e.Description,
+                Deadline = e.Deadline,
+                CreatedDate = e.CreatedDate,
+                ModifiedDate = e.ModifiedDate,
+                EmployeeGuid = e.EmployeeGuid
+            }).ToList();
+            
         }
-        return View();
+        var countTask = listTask.Count;
+        ViewData["countTask"] = countTask;
+        return View(listTask);
     }
 
 

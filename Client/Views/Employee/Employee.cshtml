@@ -1,9 +1,10 @@
-﻿@model Client.Models.Employee
+﻿@model IEnumerable<Client.Models.Task>;
 
 @{
     ViewData["Title"] = "Employee";
     Layout = null;
     string fullname = User.Identity.Name;
+    var countTask = ViewData["countTask"];
 }
 
 <html lang="en">
@@ -143,7 +144,7 @@
                                     <h5>Total Tugas</h5>
 @*                                    <span class="badge badge-primary">Monthly</span>
 *@                                </div>
-                                <h3><span class="counter">8</span></h3>
+                                <h3><span class="counter">@countTask</span></h3>
 @*                                <div class="d-flex align-items-center justify-content-between mt-1">
                                     <p class="mb-0">Total Revenue</p>
                                     <span class="text-primary">65%</span>
@@ -155,7 +156,48 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <div class="header-title">
+                                    <h4 class="card-title">Task List</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <div class="row justify-content-between">
+                                    </div>
+                                    <table id="user-list-table" class="table table-striped dataTable mt-4" role="grid"
+                                           aria-describedby="user-list-page-info">
+                                        <thead>
+                                            <tr class="ligth">
+                                                <th>Subject</th>
+                                                <th>Description</th>
+                                                <th>Deadline</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model)
+                                            {
+
+                                                <tr>
+                                                    <td>@Html.DisplayFor(modelItem => item.Subject)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                                    <td>@Html.DisplayFor(modelItem => item.Deadline)</td>
+                                                    
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Page end  -->
             </div>
         </div>

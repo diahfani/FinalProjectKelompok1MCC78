@@ -186,6 +186,15 @@
                 <div id="list" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
                     <div class="table-responsive rounded bg-white mb-4">
                         <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Subject Report</th>
+                                    <th scope="col">Deadline</th>
+                                    @*<th scope="col"></th>*@
+                                    <th scope="col">Action</th>
+                                    
+                                </tr>
+                            </thead>
                             @foreach (var item in Model)
                             {
                                 if (item.Report != null)
@@ -199,14 +208,7 @@
                                             <td>
                                                 <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Task.Deadline</p>
                                             </td>
-                                            @*<td>
-                                                <a data-toggle="modal" data-target="#ratingModal" class="btn bg-info-light">Rating</a>
-                                            </td>*@
-                                            <td>
-                                                <div class="media align-items-center mt-md-0 mt-3">
-                                                    <a class="btn bg-success-light" role="button" hidden>UPDATE REPORT</a>
-                                                </div>
-                                            </td>
+                                           
                                             <td>
                                                 @if (DateTime.Now > item.Task.Deadline)
                                                 {
@@ -231,20 +233,26 @@
                                                         </a>*@
                                                         @if(item.Rating != null)
                                                         {
-                                                            <button class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="" disabled>
-                                                                <i class="ri-pencil-line mr-0"></i>
-                                                            </button>
-                                                            <button class="btn btn-sm bg-danger" disabled>
-                                                                <i class="ri-delete-bin-line mr-0"></i>
-                                                            </button>
+                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title data-original-title="Report sudah diberikan rating">
+                                                                <button type="button" style="pointer-events: none;" class="btn btn-sm bg-primary">
+                                                                    <i class="ri-edit-2-line mr-0"></i>
+                                                                </button>
+                                                            </span>
+
+                                                            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title data-original-title="Report sudah diberikan rating">
+                                                                <button class="btn btn-sm bg-danger" title="Report sudah diberikan rating" disabled>
+                                                                    <i class="ri-delete-bin-line mr-0"></i>
+                                                                </button>
+                                                            </span>
+                                                            
                                                             
                                                         } else
-                                                        {
-                                                            <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title=""
+                                                        { 
+                                                            <a class="btn btn-sm bg-primary" data-toggle="tooltip" data-placement="top" title="Edit"
                                                                href="@Url.Action("Edit", "Report", new { item.Report.Guid /* id=item.PrimaryKey */ })">
                                                                 <i class="ri-pencil-line mr-0"></i>
                                                             </a>
-                                                            <a class="btn btn-sm bg-danger" data-toggle="modal" data-placement="top" title=""
+                                                            <a class="btn btn-sm bg-danger" data-toggle="modal" data-placement="top" title="Delete"
                                                                data-target="#modal-delete-report-@item.Report.Guid">
                                                                 <i class="ri-delete-bin-line mr-0"></i>
                                                             </a>
