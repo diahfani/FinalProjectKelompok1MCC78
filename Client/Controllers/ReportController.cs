@@ -327,7 +327,7 @@ public class ReportController : Controller
         var result = await reprepository.Post(fileDetails);
         if (result.Message == "Create Success")
         {
-            return RedirectToAction(nameof(IndexEmployee));
+            return View();
         }
         else if (result.Code == 409)
         {
@@ -335,7 +335,7 @@ public class ReportController : Controller
             return View();
         }
 
-        return RedirectToAction(nameof(IndexEmployee));
+        return View();
     }
 
     [HttpGet]
@@ -363,7 +363,7 @@ public class ReportController : Controller
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("DownloadFile")]
     public async Task<IActionResult> DownloadFile(Guid reportId)
     {
         var result = await reprepository.DownloadReport(reportId);

@@ -13,6 +13,7 @@ public class RatingRepository : GeneralRepository<Rating>, IRatingRepository
 
     public IEnumerable<RatingVM> GetRatingByEmployeeId(Guid employeeId)
     {
+        var getTaskbyEmployee = _context.Set<Model.Task>().Where(e => e.EmployeeGuid == employeeId).ToList();
         var ratings = _context.Set<Rating>().Where(r => r.Guid == employeeId).ToList();
         var ratingVM = new List<RatingVM>();
 

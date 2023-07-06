@@ -78,8 +78,45 @@ public class RatingController : Controller
 
     public async Task<IActionResult> PerformanceEmployee()
     {
+        var employeeId = Guid.Parse(_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var getTask = await taskrepository.GetTaskByEmployeeId(employeeId);
+        /*foreach(var item in getTask.Data)
+        {
+            var result = await ratrepository.Get(item.Guid);
+            var result2 = await taskrepository.Get(item.Guid);
+            var viewModel = new TaskRatingViewModel();
+
+            if (result.Data != null)
+            {
+                viewModel.Ratings = new Rating
+                {
+                    Guid = result.Data.Guid,
+                    RatingValue = result.Data.RatingValue,
+                    Comment = result.Data.Comment,
+                    CreatedDate = result.Data.CreatedDate,
+                    ModifiedDate = result.Data.ModifiedDate
+                };
+            }
+            if (result2.Data != null)
+            {
+                viewModel.Tasks = new Models.Task
+                {
+                    Guid = result2.Data.Guid,
+                    Subject = result2.Data.Subject,
+                    Description = result2.Data.Description,
+                    Deadline = result2.Data.Deadline,
+                    EmployeeGuid = result2.Data.EmployeeGuid,
+                    CreatedDate = result2.Data.CreatedDate,
+                    ModifiedDate = result2.Data.ModifiedDate
+
+                };
+            }
+        }
+        return View(viewModel);*/
+        var result2 = await taskrepository.GetTaskByEmployeeId(employeeId);
+        foreach(var item in result2.Data) { 
+        }
         var result = await ratrepository.Get();
-        var result2 = await taskrepository.Get();
         var viewModel = new TaskRatingViewModel();
 
         if (result.Data != null)
@@ -107,8 +144,9 @@ public class RatingController : Controller
 
             }).ToList();
         }
-
         return View(viewModel);
+
+
     }
 
 
