@@ -327,15 +327,15 @@ public class ReportController : Controller
         var result = await reprepository.Post(fileDetails);
         if (result.Message == "Create Success")
         {
-            return View();
+            return Redirect("/Report/IndexManager");
         }
         else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
-            return View();
+            return Redirect("/Report/IndexManager");
         }
 
-        return View();
+        return Redirect("/Report/IndexManager");
     }
 
     [HttpGet]
@@ -408,7 +408,7 @@ public class ReportController : Controller
         var result = await reprepository.Put(fileDetails);
         if (result.Code == 200)
         {
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(IndexEmployee));
         }
         else if (result.Code == 409)
         {
@@ -416,7 +416,7 @@ public class ReportController : Controller
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(IndexEmployee));
     }
 
     [HttpGet]

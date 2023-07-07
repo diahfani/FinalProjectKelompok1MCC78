@@ -4,7 +4,8 @@
 @{
     Layout = null;
     string fullname = User.Identity.Name;
-    
+    ViewData["Title"] = "Feedback Report - Employee";
+
 }
 
 <!DOCTYPE html>
@@ -54,7 +55,7 @@
           </div>
           <div class="data-scrollbar" data-scroll="1">
               <nav class="iq-sidebar-menu">
-                  <ul id="iq-sidebar-toggle" class="iq-menu">
+                    <ul id="iq-sidebar-toggle" class="iq-menu">
                         <li class="">
                             <a asp-controller="Employee" asp-action="Employee" class="svg-icon">
                                 <svg class="svg-icon" width="25" height="25" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -81,7 +82,7 @@
                                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
                                 </svg>
-                                <span class="ml-4">History Report</span>
+                                <span class="ml-4">Report</span>
                             </a>
                         </li>
 
@@ -107,9 +108,9 @@
                                 <span class="ml-4">Performance</span>
                             </a>
                         </li>
-                      
-                  </ul>
-              </nav>
+
+                    </ul>
+                </nav>
               
               <div class="pt-5 pb-2"></div>
           </div>
@@ -173,10 +174,10 @@
                 <table class="table mb-0 table-borderless tbl-server-info tble-min-width">
                             <thead>
                                 <tr>
-                                    <th scope="col">Subject Report</th>
-                                    <th scope="col">Dibuat tanggal</th>
+                                    <th scope="col" style="padding: 20px;">Subject Report</th>
+                                    <th scope="col" style="padding: 20px;">Dibuat tanggal</th>
                                     @*<th scope="col"></th>*@
-                                    <th scope="col">Action</th>
+                                    <th scope="col" style="padding: 20px;">Action</th>
 
                                 </tr>
                             </thead>
@@ -192,9 +193,7 @@
                                             <td>
                                                 <p class="mb-0"><i class="las la-calendar-check mr-2"></i>@item.Report.CreatedDate</p>
                                             </td>
-                                            @*<td>
-                                    <p class="mb-0"><i class="las la-calendar-check mr-2"></i>02 / 02 / 2021</p>
-                                    </td>*@
+                                            
                                             <td>
 
                                                 @if (item.Rating != null)
@@ -204,19 +203,13 @@
                                                 else
                                                 {
                                                     <div class="flex align-items-center list-user-action">
-                                                        <button class="btn btn-outline-light-gray" disabled>
+                                                        <button class="btn btn bg-info-light" disabled>
                                                             Rating
                                                         </button>
                                                     </div>
 
                                                 }
                                             </td>
-                                            @*<td>
-
-                                    <div class="media align-items-center mt-md-0 mt-3">
-                                    <a class="btn bg-success-light" data-toggle="collapse" href="#collapseEdit2" role="button" aria-expanded="false" aria-controls="collapseEdit2"><i class="ri-edit-box-line m-0"></i></a>
-                                    </div>
-                                    </td>*@
                                         </tr>
                                     </tbody>
 
@@ -225,98 +218,7 @@
                             }
                 </table>
                 
-@*                <div class="collapse" id="collapseEdit2">                                            
-                                    <div class="card card-list task-card">
-                                        <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
-                                            <div class="header-title">
-                                                <div class="custom-control custom-checkbox custom-control-inline">
-                                                    <input type="checkbox" class="custom-control-input" id="customCheck006">
-                                                    <div>
-                                                    <h5 class="mb-2">Judul</h5>
-                                                </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6">                                                        
-                                                            <h5 class="mb-2">Description</h5>
-                                                            <p class="mb-0">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText4" class="h5">Deadline</label>
-                                                                <div class="custom-file">
-                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Deadline</label>
-                                                                </div>
-                                                            </div>                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText4" class="h5">Created Date</label>
-                                                                <div class="custom-file">
-                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Dibuat</label>
-                                                                </div>
-                                                            </div>                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText4" class="h5">Modified Date</label>
-                                                                <div class="custom-file">
-                                                                     <label class="custom-file-label2" for="inputGroupFile002">Tanggal Diedit</label>
-                                                                </div>
-                                                            </div>                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card mb-3">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        
-                                                        <div class="col-lg-6">
-                                                            <div class="form-group mb-0">
-                                                                <label for="exampleInputText01" class="h5">Attachments</label>
-                                                                    <div class="custom-file">
-                                                                         <label class="custom-file-label2" for="inputGroupFile002">Nama File</label>
-                                                                    </div>
-                                                            </div>                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> 
-*@            </div>
+            </div>
         </div>
         <!-- Page end  -->
     </div>
@@ -342,8 +244,9 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" name="guid" value="@item.Rating?.Guid" />
                                 <input type="hidden" name="ratingValue" value="@item.Rating?.RatingValue" />
-
-                                <div class="rating-stars" id="ratingStars_@item.Rating?.Guid" value="@item.Rating?.RatingValue">
+                                
+                                <div class="rating-stars" style="margin: 10px; display: flex; justify-content: center; padding: 10px;" id="ratingStars_@item.Rating?.Guid" value="@item.Rating?.RatingValue">
+                                    
                                     @for (int i = 1; i <= 5; i++)
                                     {
                                         if (i <= item.Rating?.RatingValue)
@@ -359,7 +262,7 @@
 
 
 
-                                <textarea class="custom-textbox" name="comment">@item.Rating?.Comment</textarea>
+                                <textarea readonly class="custom-textbox form-control" name="comment">@item.Rating?.Comment</textarea>
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

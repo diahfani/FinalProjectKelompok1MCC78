@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Creates Rating</title>
+    <title>Creates Rating - Employee</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
 
@@ -100,7 +100,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light p-0">
 
                     <div class="navbar-breadcrumb">
-                        <h5>Dashboard</h5>
+                        <h5>Status</h5>
                     </div>
                     <div class="d-flex align-items-center">
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -142,13 +142,13 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
                                 <div class="header-title">
-                                    <h4 class="card-title">Tambah Tugas</h4>
+                                    <h4 class="card-title">Creates Rating</h4>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <form asp-action="Creates" method="post">
                                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                    <div class="form-group">
+                                    <div class="form-group" hidden>
                                         <label asp-for="Guid">Guid:</label>
                                         <input asp-for="Guid" value="@reportId" class="form-control">
                                     </div>

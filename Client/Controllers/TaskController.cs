@@ -197,7 +197,7 @@ public class TaskController : Controller
     [HttpPost]
     [Authorize(Roles = "manager")]
     public async Task<IActionResult> Creates(Task task)
-    {
+     {
         /*if (!ModelState.IsValid)
         {
             return View();
@@ -205,7 +205,7 @@ public class TaskController : Controller
         var result = await tasrepository.Post(task);
         if (result.Code == 200)
         {
-            return Redirect("/Task/Creates");
+            return Redirect("/Task/Index");
         }
         else if (result.Code == 409)
         {
