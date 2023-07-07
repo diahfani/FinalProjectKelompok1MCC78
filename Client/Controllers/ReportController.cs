@@ -325,17 +325,17 @@ public class ReportController : Controller
             fileDetails.FileData = stream.ToArray();
         }
         var result = await reprepository.Post(fileDetails);
-        if (result.Message == "Create Success")
+        if (result.Code == 200)
         {
-            return Redirect("/Report/IndexManager");
+            return Redirect("/Report/IndexEmployee");
         }
         else if (result.Code == 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
-            return Redirect("/Report/IndexManager");
+            return Redirect("/Report/IndexEmployee");
         }
 
-        return Redirect("/Report/IndexManager");
+        return Redirect("/Report/IndexEmployee");
     }
 
     [HttpGet]

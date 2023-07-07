@@ -255,17 +255,17 @@ public class TaskController : Controller
     public async Task<IActionResult> Edit(Task task)
     {
         var result = await tasrepository.Put(task);
-        if (result.Message == "Update success")
+        if (result.Code == 200)
         {
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Task/Index");
         }
-        else if (result.Message != "Update success")
+        else if (result.Code != 409)
         {
             ModelState.AddModelError(string.Empty, result.Message);
             return View();
         }
 
-        return RedirectToAction(nameof(Index));
+        return Redirect("/Task/Index");
     }
 
     [HttpGet]

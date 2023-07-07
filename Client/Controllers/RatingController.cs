@@ -221,7 +221,7 @@ public class RatingController : Controller
         var result = await ratrepository.Post(rating);
         if (result.Code == 200)
         {
-            return RedirectToAction("StatusManager", "Home");
+            return Redirect("/Report/IndexManager");
         }
         else if (result.Code == 409)
         {
@@ -229,7 +229,7 @@ public class RatingController : Controller
             return View();
         }
 
-        return RedirectToAction("StatusManager", "Home");
+        return Redirect("/Report/IndexManager");
     }
 
     public async Task<IActionResult> Deletes(Guid guid)
