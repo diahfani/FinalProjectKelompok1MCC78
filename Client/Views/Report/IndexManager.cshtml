@@ -286,7 +286,7 @@
                                             Download File
                                         </a>*@
                                         <form asp-action="DownloadFile">
-                                            <input type="hidden" name="reportId" value="@item.Guid" class="btn btn-danger" />
+                                            <input type="hidden" name="reportId" value="@item.Report.Guid" class="btn btn-danger" />
                                             <input type="submit" value="Download" class="btn btn-primary" />
                                             <div class="btn btn-light" data-dismiss="modal">Cancel</div>
                                         </form>

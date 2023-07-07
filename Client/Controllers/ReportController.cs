@@ -364,9 +364,9 @@ public class ReportController : Controller
     }
 
     [HttpPost("DownloadFile")]
-    public async Task<IActionResult> DownloadFile(Guid reportId)
+    public async Task<IActionResult> DownloadFile(string reportId)
     {
-        var result = await reprepository.DownloadReport(reportId);
+        var result = await reprepository.DownloadReport(Guid.Parse(reportId));
         if (result == "OK")
         {
             return RedirectToAction(nameof(IndexManager));
